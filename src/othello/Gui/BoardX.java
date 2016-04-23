@@ -77,6 +77,12 @@ public class BoardX extends javax.swing.JPanel {
                 ar_fields[3][4].setStone(false);
                 ar_fields[4][3].setStone(false);
                 break;
+            case 10:
+                ar_fields[4][4].setStone(true);
+                ar_fields[5][5].setStone(true);
+                ar_fields[4][5].setStone(false);
+                ar_fields[5][4].setStone(false);
+                break;
             case 12:
                 ar_fields[5][5].setStone(true);
                 ar_fields[6][6].setStone(true);

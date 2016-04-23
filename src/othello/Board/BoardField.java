@@ -51,14 +51,16 @@ public class BoardField implements Field
             return false;
     }
 
+    @Override
     public boolean isEmpty()
     {
         return stone == null;
     }
 
+    @Override
     public boolean canPutDisk(Disk disk)
     {
-             boolean return_value = false;
+        boolean return_value = false;
         boolean roolback = false;
         int old_counter=0;
         int new_counter=0;

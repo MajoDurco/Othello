@@ -1,5 +1,6 @@
 package othello.Gui;
 
+import javax.swing.JOptionPane;
 import othello.Board.Board;
 import othello.Game.Game;
 import othello.Game.Player;
@@ -12,6 +13,7 @@ public class GameX extends javax.swing.JFrame {
     private BoardX boardX;
     private Player p1;
     private Player p2;
+    private int board_size;
     
     public GameX() 
     {
@@ -29,6 +31,7 @@ public class GameX extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,6 +69,14 @@ public class GameX extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
         jMenu1.add(jSeparator1);
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setActionCommand("Quit");
         jMenuItem1.setLabel("Quit");
@@ -120,6 +131,13 @@ public class GameX extends javax.swing.JFrame {
             pack();
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        NewGamePanel p = new NewGamePanel();
+        JOptionPane.showMessageDialog(this,p,"Create New Game",JOptionPane.PLAIN_MESSAGE);
+        this.board_size = p.getBoardSize();
+        System.out.println("Selected size : "+ this.board_size);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
     
     private void initGame()
     {
@@ -140,6 +158,7 @@ public class GameX extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

@@ -53,6 +53,10 @@ public class FieldX extends javax.swing.JPanel {
                 a[0]=74;
                 a[1]=72;
                 return a;
+            case 10:
+                a[0]=59;
+                a[1]=57;
+                return a;
             case 12:
                 a[0]=49;
                 a[1]=48;
