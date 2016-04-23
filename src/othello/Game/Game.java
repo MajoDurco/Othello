@@ -23,13 +23,13 @@ public class Game
         if(color && this.white_P==null)
         {
             this.white_P=player;
-            this.turn=player;
             player.init(board);
             return true;
         }
         else if(!color && this.black_P==null)
         {
             this.black_P=player;
+            this.turn=player;
             player.init(board);
             return true;
         }
