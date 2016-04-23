@@ -3,10 +3,17 @@ package othello.Gui;
 public class FieldX extends javax.swing.JPanel {
     private final int[] size;
     private final int[] color;
+    int row;
+    int col;
+    private BoardX board;
+    protected boolean isWhite;
     
-    public FieldX(int dimension,int even) {
+    public FieldX(int row,int col,int dimension,int even,BoardX board) {
         this.size = calcSizeOfField(dimension);
         this.color = setFieldColor(even);
+        this.row = row;
+        this.col = col;
+        this.board = board;
         initComponents();
     }
 
@@ -25,11 +32,13 @@ public class FieldX extends javax.swing.JPanel {
             }
         });
         setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         add(jLabel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/white_s.png")));
+        board.clickPerformed(row, col);
     }//GEN-LAST:event_formMouseReleased
     private int[] calcSizeOfField(int dimension)
     {
@@ -57,6 +66,20 @@ public class FieldX extends javax.swing.JPanel {
         int[] dark = {46,195,16};
         int[] light = {0,255,34};
         return even==0?light:dark;
+    }
+    
+    protected void setStone(boolean white)
+    {
+        if (white)
+        {
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/white_s.png")));
+            this.isWhite = true;
+        }
+        else
+        {
+            jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pictures/black_s.png")));
+            this.isWhite = false;
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

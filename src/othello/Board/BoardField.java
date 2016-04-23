@@ -58,7 +58,8 @@ public class BoardField implements Field
 
     public boolean canPutDisk(Disk disk)
     {
-        boolean return_value = false;
+             boolean return_value = false;
+        boolean roolback = false;
         int old_counter=0;
         int new_counter=0;
         if(ar_list.size()!=0)
@@ -78,12 +79,14 @@ public class BoardField implements Field
                     {// najdem rovnaku farbu(true)
                         if(tmp.getDisk()==null) // najdem prazdne policko false
                         {
+                            roolback=true;
                             break;
                         }
                         else if (tmp.getDisk().isWhite() == disk.isWhite()) // som v nejakom smere nasiel rovnaku farbu ako aj vkladam
                         {
                             old_counter=new_counter;
                             return_value=true;
+                            roolback=false;
                             break;
                         }
                         else // stale pokracuju superove kamene
@@ -95,10 +98,13 @@ public class BoardField implements Field
                                 tmp = tmp.nextField(dir);
                             }
                             else
+                            {
+                                roolback = true;
                                 break;
+                            }
                         }
                     }
-                    if(return_value!=true)
+                    if(roolback)
                     { // zmazem z listu neplatne kamene ktore som presiel a nakoniec som zistil ze cela cesta nieje platna
                         if(ar_list.size()!=0)
                         {

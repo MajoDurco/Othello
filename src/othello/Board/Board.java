@@ -57,4 +57,10 @@ public class Board
     {
         return this.rules;
     }
+
+    public static class field {
+
+        public field() {
+        }
+    }
 }

@@ -1,10 +1,22 @@
 package othello.Gui;
 
-public class GameX extends javax.swing.JFrame {
+import othello.Board.Board;
+import othello.Game.Game;
+import othello.Game.Player;
+import othello.Game.ReversiRules;
 
+public class GameX extends javax.swing.JFrame {
+    private ReversiRules rules; 
+    private Board board; 
+    private Game game;
+    private BoardX boardX;
+    private Player p1;
+    private Player p2;
+    
     public GameX() 
     {
         initComponents();
+        initGame();
     }
 
     @SuppressWarnings("unchecked")
@@ -90,11 +102,11 @@ public class GameX extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    //    New game
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         if (boardX == null)
         {
-            boardX = new BoardX(8); // board size [6,8,12]  
+            boardX = new BoardX(8,game); // board size [6,8,12]  
             BoardX.add(boardX).setVisible(true);
             pack();
         }
@@ -102,13 +114,25 @@ public class GameX extends javax.swing.JFrame {
         {
             BoardX.remove(boardX);
             BoardX.repaint();
-            boardX = new BoardX(8); // board size [6,8,12]  
+            initGame();  // reinitialize the game
+            boardX = new BoardX(8,game); // board size [6,8,12]  
             BoardX.add(boardX).setVisible(true);
             pack();
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
     
-    private BoardX boardX;
+    private void initGame()
+    {
+        this.rules = new ReversiRules(8); // TODO size of board
+        this.board = new Board(this.rules);
+        this.game = new Game(this.board);
+        // PLAYER 2 computer
+        p1 = new Player(true); // WHITE
+        p2 = new Player(false); // BLACK
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BoardX;
     private javax.swing.JPanel SideBar;

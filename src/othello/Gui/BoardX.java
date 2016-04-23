@@ -1,15 +1,24 @@
 package othello.Gui;
 
 import java.awt.GridBagConstraints;
-import javax.swing.JPanel;
+import othello.Board.Board;
+import othello.Board.Disk;
+import othello.Board.Field;
+import othello.Game.Game;
 
 public class BoardX extends javax.swing.JPanel {
     private final int fields;
+    private final Game game;
+    private FieldX[][] ar_fields;
     
-    public BoardX(int fields) {
+    public BoardX(int fields,Game game) 
+    {
         this.fields = fields;
+        this.game = game;
+
         initComponents();
         initFields();
+        initStones();
     }
 
     @SuppressWarnings("unchecked")
@@ -26,13 +35,16 @@ public class BoardX extends javax.swing.JPanel {
        GridBagConstraints c = new GridBagConstraints();
        int x = 0;
        int y = 0;
+       this.ar_fields = new FieldX[fields][fields];
+
        c.anchor = GridBagConstraints.NORTHWEST;
        for (int i = 0; i<fields*fields; i++)
         {
           c.gridx = x;
           c.gridy = y;
           c.fill = GridBagConstraints.BOTH;
-          FieldX f = new FieldX(fields,y%2==0?x%2:(x+1)%2);
+          FieldX f = new FieldX(y+1,x+1,fields,y%2==0?x%2:(x+1)%2,this);
+          ar_fields[y][x]=f;
           this.add(f,c);
           if( x == (fields-1) )
           {
@@ -48,6 +60,71 @@ public class BoardX extends javax.swing.JPanel {
 //        filler.setOpaque(false);
 //        this.add(filler,c);
     }
+    
+    private void initStones()
+    {
+        switch (fields)
+        {
+            case 6:
+                ar_fields[2][2].setStone(true);
+                ar_fields[3][3].setStone(true);
+                ar_fields[2][3].setStone(false);
+                ar_fields[3][2].setStone(false);
+                break;
+            case 8:
+                ar_fields[3][3].setStone(true);
+                ar_fields[4][4].setStone(true);
+                ar_fields[3][4].setStone(false);
+                ar_fields[4][3].setStone(false);
+                break;
+            case 12:
+                ar_fields[5][5].setStone(true);
+                ar_fields[6][6].setStone(true);
+                ar_fields[5][6].setStone(false);
+                ar_fields[6][5].setStone(false);
+                break;
+        }
+
+    }
+    
+    // this col and row starts from [1,1]
+    protected void clickPerformed(int row,int col)
+    {
+        System.out.println("Clicked Row: "+row+" Col: "+col+"");
+        if (canPlaceStone(row,col)) // true
+        {
+            Field f1 = game.getBoard().getField(row, col);
+            this.game.currentPlayer().putDisk(f1);
+            ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
+            refactor();
+            game.nextPlayer(); // on successful place the stone switch player
+        }
+    }
+    
+    private boolean canPlaceStone(int row,int col)
+    {
+        Field f1 = game.getBoard().getField(row, col);
+        return this.game.currentPlayer().canPutDisk(f1);
+    }
+    
+    private void refactor()
+    {
+        Board b = game.getBoard();
+        for(int y=1; y<=fields; y++)
+            for(int x=1; x<=fields; x++)
+            {
+                Disk f = b.getField(y, x).getDisk();
+                FieldX fX = ar_fields[y-1][x-1];
+                if (f != null)
+                { 
+                   if(fX.isWhite != f.isWhite()) // control the colors on the same position
+                   { // repaint 
+                      fX.setStone(f.isWhite());
+                   }
+                }
+            }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+//setStone(game.currentPlayer().isWhite());
 }
