@@ -1,12 +1,14 @@
 package othello.Gui;
 
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JOptionPane;
 import othello.Board.Board;
 import othello.Game.Game;
 import othello.Game.Player;
 import othello.Game.ReversiRules;
 
-public class GameX extends javax.swing.JFrame {
+public class GameX extends javax.swing.JFrame implements Observer {
     private ReversiRules rules; 
     private Board board; 
     private Game game;
@@ -19,6 +21,7 @@ public class GameX extends javax.swing.JFrame {
     public GameX() 
     {
         initComponents();
+        visibleSidePanel(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -27,6 +30,12 @@ public class GameX extends javax.swing.JFrame {
 
         BoardX = new javax.swing.JPanel();
         SideBar = new javax.swing.JPanel();
+        Turn = new javax.swing.JLabel();
+        TurnPlayer = new javax.swing.JLabel();
+        WhiteStones = new javax.swing.JLabel();
+        BlackStones = new javax.swing.JLabel();
+        WhiteCount = new javax.swing.JLabel();
+        BlackCount = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -44,15 +53,65 @@ public class GameX extends javax.swing.JFrame {
 
         SideBar.setPreferredSize(new java.awt.Dimension(200, 600));
 
+        Turn.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        Turn.setText("Turn:");
+
+        TurnPlayer.setText("Black");
+
+        WhiteStones.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        WhiteStones.setText("White Stones:");
+
+        BlackStones.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        BlackStones.setText("Black Stones:");
+
+        WhiteCount.setText("2");
+
+        BlackCount.setText("2");
+
         javax.swing.GroupLayout SideBarLayout = new javax.swing.GroupLayout(SideBar);
         SideBar.setLayout(SideBarLayout);
         SideBarLayout.setHorizontalGroup(
             SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SideBarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SideBarLayout.createSequentialGroup()
+                        .addComponent(WhiteCount, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SideBarLayout.createSequentialGroup()
+                        .addComponent(BlackCount, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63))))
+            .addGroup(SideBarLayout.createSequentialGroup()
+                .addGroup(SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SideBarLayout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addComponent(TurnPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(SideBarLayout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addGroup(SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BlackStones)
+                            .addComponent(WhiteStones)))
+                    .addGroup(SideBarLayout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(Turn)))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         SideBarLayout.setVerticalGroup(
             SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(SideBarLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(Turn)
+                .addGap(18, 18, 18)
+                .addComponent(TurnPlayer)
+                .addGap(45, 45, 45)
+                .addComponent(WhiteStones)
+                .addGap(18, 18, 18)
+                .addComponent(WhiteCount)
+                .addGap(18, 18, 18)
+                .addComponent(BlackStones)
+                .addGap(18, 18, 18)
+                .addComponent(BlackCount)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -125,6 +184,7 @@ public class GameX extends javax.swing.JFrame {
             initGame();
             boardX = new BoardX(this.board_size,game);
             BoardX.add(boardX).setVisible(true);
+            visibleSidePanel(true);
             pack();
         }
         else // recreate new game on existing one
@@ -134,6 +194,7 @@ public class GameX extends javax.swing.JFrame {
             initGame();  // reinitialize the game
             boardX = new BoardX(this.board_size,game);
             BoardX.add(boardX).setVisible(true);
+            visibleSidePanel(true);
             pack();
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -148,15 +209,45 @@ public class GameX extends javax.swing.JFrame {
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
         game.addPlayer(p2);
+        game.attach(this); // attach observer
     }
     
+    private void visibleSidePanel(boolean visible)
+    {
+        Turn.setVisible(visible);
+        TurnPlayer.setVisible(visible);
+        WhiteStones.setVisible(visible);
+        WhiteCount.setVisible(visible);
+        BlackStones.setVisible(visible);
+        BlackCount.setVisible(visible);
+    }
+    
+    private void switchPlayer()
+    {
+        if(game.currentPlayer().isWhite())
+            TurnPlayer.setText("White");
+        else
+            TurnPlayer.setText("Black");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BlackCount;
+    private javax.swing.JLabel BlackStones;
     private javax.swing.JPanel BoardX;
     private javax.swing.JPanel SideBar;
+    private javax.swing.JLabel Turn;
+    private javax.swing.JLabel TurnPlayer;
+    private javax.swing.JLabel WhiteCount;
+    private javax.swing.JLabel WhiteStones;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("Notify get");
+        switchPlayer();
+    }
 }

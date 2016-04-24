@@ -96,7 +96,6 @@ public class BoardX extends javax.swing.JPanel {
     // this col and row starts from [1,1]
     protected void clickPerformed(int row,int col)
     {
-        System.out.println("Clicked Row: "+row+" Col: "+col+"");
         if (canPlaceStone(row,col)) // true
         {
             Field f1 = game.getBoard().getField(row, col);
