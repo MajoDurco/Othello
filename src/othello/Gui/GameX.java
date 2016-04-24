@@ -209,7 +209,10 @@ public class GameX extends javax.swing.JFrame implements Observer {
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
         game.addPlayer(p2);
-        game.attach(this); // attach observer
+        
+        game.attach(this); // attach observers
+        p1.attach(this);
+        p2.attach(this);
     }
     
     private void visibleSidePanel(boolean visible)
@@ -229,6 +232,14 @@ public class GameX extends javax.swing.JFrame implements Observer {
         else
             TurnPlayer.setText("Black");
     }
+    
+    private void playerStonePool(int player_pool)
+    {
+        if(game.currentPlayer().isWhite())
+            WhiteCount.setText(String.valueOf(player_pool));
+        else
+            BlackCount.setText(String.valueOf(player_pool));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BlackCount;
     private javax.swing.JLabel BlackStones;
@@ -246,8 +257,13 @@ public class GameX extends javax.swing.JFrame implements Observer {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void update(Observable o, Object arg) {
-        System.out.println("Notify get");
-        switchPlayer();
+    public void update(Observable o, Object arg) 
+    {
+        if (arg == null)
+            switchPlayer();
+        else if(arg instanceof Integer)
+            playerStonePool((int)arg);
+        else
+            return;
     }
 }

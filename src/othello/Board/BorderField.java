@@ -22,9 +22,9 @@ public class BorderField implements Field
     }
 
     @Override
-    public boolean putDisk(Disk disk)
+    public int putDisk(Disk disk)
     {
-        return false;
+        return 0;
     }
 
     public boolean isEmpty()

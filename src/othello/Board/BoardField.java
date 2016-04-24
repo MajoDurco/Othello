@@ -35,7 +35,7 @@ public class BoardField implements Field
     }
 
     @Override
-    public boolean putDisk(Disk disk)
+    public int putDisk(Disk disk)
     {
         if(this.stone == null)
         {
@@ -44,11 +44,12 @@ public class BoardField implements Field
             {
                 F.getDisk().turn();
             }
+            int stone_switched = ar_list.size();
             ar_list.clear();
-            return true;
+            return stone_switched;
         }
         else
-            return false;
+            return 0;
     }
 
     @Override

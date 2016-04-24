@@ -9,7 +9,7 @@ public interface Field
     void addNextField(Field.Direction dirs, Field field);
     Disk getDisk();
     Field nextField(Field.Direction dirs);
-    boolean putDisk(Disk disk);
+    int putDisk(Disk disk);
     boolean isEmpty();
     boolean canPutDisk(Disk disk);
 }

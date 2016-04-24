@@ -47,7 +47,7 @@ public class Game extends Observable
     {
         return turn;
     }
-
+    
     public Player nextPlayer()
     {
         if(turn.isWhite())
@@ -80,8 +80,7 @@ public class Game extends Observable
     {
         for (Observer observer : observers)
         {
-            System.out.println("Notify sent");  
-            observer.update(this, null);
+             observer.update(this, null);
         }
     }
 }

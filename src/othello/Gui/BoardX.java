@@ -99,10 +99,11 @@ public class BoardX extends javax.swing.JPanel {
         if (canPlaceStone(row,col)) // true
         {
             Field f1 = game.getBoard().getField(row, col);
-            this.game.currentPlayer().putDisk(f1);
+            int swaped = this.game.currentPlayer().putDisk(f1);
             ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
             refactor();
             game.nextPlayer(); // on successful place the stone switch player
+            this.game.currentPlayer().setStoneNum(-swaped); // have to balansce the number of stones on the other side
         }
     }
     
