@@ -14,11 +14,11 @@ public class GameX extends javax.swing.JFrame {
     private Player p1;
     private Player p2;
     private int board_size;
+    private boolean oponent_is_player;
     
     public GameX() 
     {
         initComponents();
-        initGame();
     }
 
     @SuppressWarnings("unchecked")
@@ -31,11 +31,11 @@ public class GameX extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Othello");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Pictures/othello_icon.png")).getImage());
         setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
 
@@ -69,14 +69,6 @@ public class GameX extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
         jMenu1.add(jSeparator1);
-
-        jMenuItem3.setText("jMenuItem3");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setActionCommand("Quit");
         jMenuItem1.setLabel("Quit");
@@ -115,9 +107,23 @@ public class GameX extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
     //    New game
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        NewGamePanel p = new NewGamePanel();
+        String[] options = {"Create","Cancel"};
+        int response = JOptionPane.showOptionDialog(this,p,"Create New Game",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+        if(response != JOptionPane.OK_OPTION)
+        {
+            System.out.println("EXITED OR CANCELED");
+            return;
+        }
+        this.board_size = p.getBoardSize();
+        this.oponent_is_player = p.getOponent();
+        System.out.println("Selected size : "+ this.board_size);
+        System.out.println("Selected oponent : "+ this.oponent_is_player);
+
         if (boardX == null)
         {
-            boardX = new BoardX(8,game); // board size [6,8,12]  
+            initGame();
+            boardX = new BoardX(this.board_size,game);
             BoardX.add(boardX).setVisible(true);
             pack();
         }
@@ -126,25 +132,18 @@ public class GameX extends javax.swing.JFrame {
             BoardX.remove(boardX);
             BoardX.repaint();
             initGame();  // reinitialize the game
-            boardX = new BoardX(8,game); // board size [6,8,12]  
+            boardX = new BoardX(this.board_size,game);
             BoardX.add(boardX).setVisible(true);
             pack();
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        NewGamePanel p = new NewGamePanel();
-        JOptionPane.showMessageDialog(this,p,"Create New Game",JOptionPane.PLAIN_MESSAGE);
-        this.board_size = p.getBoardSize();
-        System.out.println("Selected size : "+ this.board_size);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
     
     private void initGame()
     {
-        this.rules = new ReversiRules(8); // TODO size of board
+        this.rules = new ReversiRules(this.board_size);
         this.board = new Board(this.rules);
         this.game = new Game(this.board);
-        // PLAYER 2 computer
+        // TODO AI PLAYER 2 (computer)
         p1 = new Player(true); // WHITE
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
@@ -158,7 +157,6 @@ public class GameX extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
