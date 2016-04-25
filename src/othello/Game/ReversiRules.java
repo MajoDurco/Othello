@@ -1,7 +1,8 @@
 package othello.Game;
 
+import java.io.Serializable;
 import othello.Board.*;
-public class ReversiRules implements Rules
+public class ReversiRules implements Rules,Serializable
 {
     private final int size;
 

@@ -1,7 +1,7 @@
 package othello.Gui;
 
 import java.awt.GridBagConstraints;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import othello.Board.Board;
 import othello.Board.Disk;
 import othello.Board.Field;
@@ -59,9 +59,9 @@ public class BoardX extends javax.swing.JPanel {
         }
         c.weighty = 1;
         c.weightx = 1;
-//        JPanel filler = new JPanel();
-//        filler.setOpaque(false);
-//        this.add(filler,c);
+        JPanel filler = new JPanel();
+        filler.setOpaque(false);
+        this.add(filler,c);
     }
     
     private void initStones()
@@ -152,6 +152,24 @@ public class BoardX extends javax.swing.JPanel {
         if(sum == this.fields*this.fields)
             return true;
         return true;
+    }
+    
+    protected void loadField()
+    {
+        Board b = game.getBoard();
+        for(int y=1; y<=fields; y++)
+            for(int x=1; x<=fields; x++)
+            {
+                Disk f = b.getField(y, x).getDisk();
+                FieldX fX = ar_fields[y-1][x-1];
+                if (f != null)
+                { 
+                    if(f.isWhite())
+                       fX.setStone(true);
+                   else
+                       fX.setStone(false);
+                }
+            }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

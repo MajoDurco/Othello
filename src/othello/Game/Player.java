@@ -1,16 +1,17 @@
 package othello.Game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import othello.Board.*;
 
-public class Player extends Observable
+public class Player extends Observable implements Serializable
 {
     private boolean player_color; // true - white , false - black
     private int player_pool;
-    private final List<Observer> observers = new ArrayList<>();
+    private final transient List<Observer> observers = new ArrayList<>();
     
     public Player(boolean isWhite)
     {
@@ -42,6 +43,7 @@ public class Player extends Observable
     {
         this.player_pool += number;
         notifyAllObservers();
+        System.out.println("this.player_pool : "+ this.player_pool );
     }
     
     public int getStoneNum()
@@ -90,6 +92,11 @@ public class Player extends Observable
     public void attach(Observer observer)
     {
         observers.add(observer);
+    }
+    
+    public void removeAllObservers()
+    {
+        observers.clear();
     }
     
     public void notifyAllObservers()

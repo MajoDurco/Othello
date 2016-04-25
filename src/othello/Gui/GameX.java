@@ -1,24 +1,32 @@
 package othello.Gui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import othello.Board.Board;
 import othello.Game.Game;
 import othello.Game.Player;
 import othello.Game.ReversiRules;
 
-public class GameX extends javax.swing.JFrame implements Observer {
+public class GameX extends javax.swing.JFrame implements Observer
+{
     private ReversiRules rules; 
     private Board board; 
     private Game game;
+    private Game game_serialized;
     private BoardX boardX;
     private Player p1;
     private Player p2;
     private int board_size;
     private boolean oponent_is_player;
-    
-    private int actual_score_flag = 0;
     
     public GameX() 
     {
@@ -40,9 +48,11 @@ public class GameX extends javax.swing.JFrame implements Observer {
         BlackCount = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        New = new javax.swing.JMenuItem();
+        Save = new javax.swing.JMenuItem();
+        Load = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        Quit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Othello");
@@ -121,24 +131,40 @@ public class GameX extends javax.swing.JFrame implements Observer {
 
         jMenu1.setText("Menu");
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("New game");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        New.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        New.setText("New game");
+        New.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                NewActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(New);
+
+        Save.setText("Save game");
+        Save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Save);
+
+        Load.setText("Load game");
+        Load.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Load);
         jMenu1.add(jSeparator1);
 
-        jMenuItem1.setActionCommand("Quit");
-        jMenuItem1.setLabel("Quit");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        Quit.setActionCommand("Quit");
+        Quit.setLabel("Quit");
+        Quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                QuitActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(Quit);
 
         jMenuBar1.add(jMenu1);
 
@@ -163,11 +189,11 @@ public class GameX extends javax.swing.JFrame implements Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     //    Quit button action
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_QuitActionPerformed
     //    New game
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void NewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewActionPerformed
         NewGamePanel p = new NewGamePanel();
         String[] options = {"Create","Cancel"};
         int response = JOptionPane.showOptionDialog(this,p,"Create New Game",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
@@ -178,28 +204,80 @@ public class GameX extends javax.swing.JFrame implements Observer {
         }
         this.board_size = p.getBoardSize();
         this.oponent_is_player = p.getOponent();
-        System.out.println("Selected size : "+ this.board_size);
-        System.out.println("Selected oponent : "+ this.oponent_is_player);
 
-        if (boardX == null)
-        {
-            initGame();
-            boardX = new BoardX(this.board_size,game,this);
-            BoardX.add(boardX).setVisible(true);
-            visibleSidePanel(true);
-            pack();
-        }
-        else // recreate new game on existing one
+        if (boardX != null)
         {
             BoardX.remove(boardX);
             BoardX.repaint();
-            initGame();  // reinitialize the game
-            boardX = new BoardX(this.board_size,game,this);
-            BoardX.add(boardX).setVisible(true);
-            visibleSidePanel(true);
-            pack();
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        initGame();
+        boardX = new BoardX(this.board_size,game,this);
+        BoardX.add(boardX).setVisible(true);
+        this.boardX.loadField();
+        visibleSidePanel(true);
+        pack();
+    }//GEN-LAST:event_NewActionPerformed
+    // SAVE
+    private void SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveActionPerformed
+        JFileChooser file_chooser = new JFileChooser();
+        file_chooser.setAcceptAllFileFilterUsed(false);  // remove all files filter      
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Othello games", "othel");
+        file_chooser.setFileFilter(filter); // set new filter
+        
+        int returnVal = file_chooser.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            File file = file_chooser.getSelectedFile();
+            String file_name = file.toString();
+            if (!file_name.endsWith(".othel"))
+                file_name += ".othel";
+            try 
+            {
+                FileOutputStream fout = new FileOutputStream(file_name);
+                try (ObjectOutputStream out_file_stream = new ObjectOutputStream(fout)) 
+                {
+                    out_file_stream.writeObject(this.game);
+                }
+            }
+            catch (Exception exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+        else
+            System.out.println("EXIT");
+    }//GEN-LAST:event_SaveActionPerformed
+    // LOAD
+    private void LoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadActionPerformed
+        JFileChooser file_chooser = new JFileChooser();
+        file_chooser.setAcceptAllFileFilterUsed(false);  // remove all files filter      
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Othello games", "othel");
+        file_chooser.setFileFilter(filter); // set new filter
+        
+        int returnVal = file_chooser.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            File file = file_chooser.getSelectedFile();
+            String file_name = file.toString();
+            if (!file_name.endsWith(".othel"))
+                file_name += ".othel";
+            try 
+            {
+                FileInputStream f_in = new FileInputStream(file_name);
+                try (ObjectInputStream in_file_stream = new ObjectInputStream(f_in)) 
+                {
+                    this.game_serialized = (Game) in_file_stream.readObject();
+                    loadGame();
+                }
+            }
+            catch (IOException | ClassNotFoundException exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+        else
+            System.out.println("EXIT");
+    }//GEN-LAST:event_LoadActionPerformed
     
     private void initGame()
     {
@@ -242,24 +320,9 @@ public class GameX extends javax.swing.JFrame implements Observer {
         else
             BlackCount.setText(String.valueOf(player_pool));
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel BlackCount;
-    private javax.swing.JLabel BlackStones;
-    private javax.swing.JPanel BoardX;
-    private javax.swing.JPanel SideBar;
-    private javax.swing.JLabel Turn;
-    private javax.swing.JLabel TurnPlayer;
-    private javax.swing.JLabel WhiteCount;
-    private javax.swing.JLabel WhiteStones;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void update(Observable o, Object arg) 
+    
+        @Override
+    public void update(Observable o, Object arg)    
     {
         if (arg == null)
             switchPlayer();
@@ -276,6 +339,74 @@ public class GameX extends javax.swing.JFrame implements Observer {
     
     protected void endGame()
     {
-        JOptionPane.showMessageDialog(this,"End of game");
+        JOptionPane.showMessageDialog(this,whoWins()+" the game","End of the game",JOptionPane.PLAIN_MESSAGE);
     }
+    
+    private String whoWins()
+    {
+        int white_score = getPlayerScore(true);
+        int black_score = getPlayerScore(false);
+        if(white_score > black_score )
+            return "White player wins";
+        else if ( white_score < black_score)
+            return "Black player wins";
+        else
+            return "It's draw, both players are winners";
+    }
+    
+    private void loadGame()
+    {
+        int white_pool = this.game_serialized.getPlayer(true).getStoneNum();
+        int black_pool = this.game_serialized.getPlayer(false).getStoneNum();
+        System.out.println("white_pool : " + white_pool + " black_pool: "+ black_pool);
+        this.board_size = this.game_serialized.getBoard().getSize();
+        this.rules = new ReversiRules(this.board_size);
+        this.board = this.game_serialized.getBoard();
+        this.game = new Game(this.board);
+ 
+       // TODO AI PLAYER 2 (computer)
+        p1 = new Player(true); // WHITE
+        p2 = new Player(false); // BLACK
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+        game.attach(this); // attach observers
+        p1.attach(this);
+        p2.attach(this);
+
+        if(this.game_serialized.currentPlayer().isWhite())
+        this.game.nextPlayer();// White
+
+        //        this.oponent_is_player = p.getOponent(); TODO
+        if (boardX != null)
+        {
+            BoardX.remove(boardX);
+            BoardX.repaint();
+        }
+        boardX = new BoardX(this.board_size,this.game,this);
+        boardX.loadField();
+        BoardX.add(boardX).setVisible(true);
+        this.boardX.loadField();
+        WhiteCount.setText(String.valueOf(white_pool));
+        BlackCount.setText(String.valueOf(black_pool));
+        visibleSidePanel(true);
+        pack();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BlackCount;
+    private javax.swing.JLabel BlackStones;
+    private javax.swing.JPanel BoardX;
+    private javax.swing.JMenuItem Load;
+    private javax.swing.JMenuItem New;
+    private javax.swing.JMenuItem Quit;
+    private javax.swing.JMenuItem Save;
+    private javax.swing.JPanel SideBar;
+    private javax.swing.JLabel Turn;
+    private javax.swing.JLabel TurnPlayer;
+    private javax.swing.JLabel WhiteCount;
+    private javax.swing.JLabel WhiteStones;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    // End of variables declaration//GEN-END:variables
 }

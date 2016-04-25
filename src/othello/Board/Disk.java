@@ -1,6 +1,8 @@
 package othello.Board;
 
-public class Disk
+import java.io.Serializable;
+
+public class Disk implements Serializable
 {
     protected boolean isWhite; // color of the disk, true == white, false == blacks
     public Disk(boolean isWhite)

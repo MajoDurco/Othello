@@ -1,8 +1,9 @@
 package othello.Board;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BoardField implements Field
+public class BoardField implements Field, Serializable
 {
     protected int row;
     protected int col;

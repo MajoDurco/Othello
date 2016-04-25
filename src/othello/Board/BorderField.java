@@ -1,6 +1,8 @@
 package othello.Board;
 
-public class BorderField implements Field
+import java.io.Serializable;
+
+public class BorderField implements Field, Serializable
 {
     protected Field[] field_surround = new Field[8];
     @Override

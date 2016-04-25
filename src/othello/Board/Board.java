@@ -1,8 +1,10 @@
 package othello.Board;
 
-public class Board
+import java.io.Serializable;
+
+public class Board implements Serializable
 {
-    protected Field[] board_array; // array of objects which implements interface Field
+    public Field[] board_array; // array of objects which implements interface Field
     protected int size;
     protected Rules rules;
 
