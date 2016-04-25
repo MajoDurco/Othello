@@ -18,6 +18,8 @@ public class GameX extends javax.swing.JFrame implements Observer {
     private int board_size;
     private boolean oponent_is_player;
     
+    private int actual_score_flag = 0;
+    
     public GameX() 
     {
         initComponents();
@@ -182,7 +184,7 @@ public class GameX extends javax.swing.JFrame implements Observer {
         if (boardX == null)
         {
             initGame();
-            boardX = new BoardX(this.board_size,game);
+            boardX = new BoardX(this.board_size,game,this);
             BoardX.add(boardX).setVisible(true);
             visibleSidePanel(true);
             pack();
@@ -192,7 +194,7 @@ public class GameX extends javax.swing.JFrame implements Observer {
             BoardX.remove(boardX);
             BoardX.repaint();
             initGame();  // reinitialize the game
-            boardX = new BoardX(this.board_size,game);
+            boardX = new BoardX(this.board_size,game,this);
             BoardX.add(boardX).setVisible(true);
             visibleSidePanel(true);
             pack();
@@ -265,5 +267,15 @@ public class GameX extends javax.swing.JFrame implements Observer {
             playerStonePool((int)arg);
         else
             return;
+    }
+
+    protected int getPlayerScore(boolean white_player)
+    {
+        return white_player?Integer.parseInt(WhiteCount.getText()):Integer.parseInt(BlackCount.getText());
+    }
+    
+    protected void endGame()
+    {
+        JOptionPane.showMessageDialog(this,"End of game");
     }
 }

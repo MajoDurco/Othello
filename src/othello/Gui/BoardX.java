@@ -1,6 +1,7 @@
 package othello.Gui;
 
 import java.awt.GridBagConstraints;
+import javax.swing.JOptionPane;
 import othello.Board.Board;
 import othello.Board.Disk;
 import othello.Board.Field;
@@ -10,11 +11,13 @@ public class BoardX extends javax.swing.JPanel {
     private final int fields;
     private final Game game;
     private FieldX[][] ar_fields;
+    private final GameX gameX;
     
-    public BoardX(int fields,Game game) 
+    public BoardX(int fields,Game game,GameX gameX) 
     {
         this.fields = fields;
         this.game = game;
+        this.gameX = gameX;
 
         initComponents();
         initFields();
@@ -104,6 +107,8 @@ public class BoardX extends javax.swing.JPanel {
             refactor();
             game.nextPlayer(); // on successful place the stone switch player
             this.game.currentPlayer().setStoneNum(-swaped); // have to balansce the number of stones on the other side
+            if(checkEndGame())
+                gameX.endGame();
         }
     }
     
@@ -130,7 +135,24 @@ public class BoardX extends javax.swing.JPanel {
                 }
             }
     }
+    
+    private boolean checkEndGame()
+    {
+        Board b = game.getBoard();
+        for(int y=1; y<=fields; y++)
+            for(int x=1; x<=fields; x++)
+            {
+                Disk f = b.getField(y, x).getDisk();    
+                FieldX fX = ar_fields[y-1][x-1];
+                if (f == null && canPlaceStone(y,x))
+                    return false;
+            }
+        // if all stones on the board is equal to board_size*board_size
+        int sum = gameX.getPlayerScore(true) + gameX.getPlayerScore(false);
+        if(sum == this.fields*this.fields)
+            return true;
+        return true;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-//setStone(game.currentPlayer().isWhite());
 }
