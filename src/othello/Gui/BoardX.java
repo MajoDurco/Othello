@@ -103,7 +103,10 @@ public class BoardX extends javax.swing.JPanel {
         {
             Field f1 = game.getBoard().getField(row, col);
             if(!game.currentPlayer().isWhite()) // is black so its player
+            {
                 game.playerMove(); // save board for undo
+                gameX.enableUndo();
+            }
             int swaped = this.game.currentPlayer().putDisk(f1);
             ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
             refactor();

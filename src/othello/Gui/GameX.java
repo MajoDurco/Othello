@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import othello.Board.Board;
 import othello.Game.Game;
@@ -27,11 +29,17 @@ public class GameX extends javax.swing.JFrame implements Observer
     private Player p2;
     private int board_size;
     private boolean oponent_is_player;
+    private boolean freeze_stones;
     
+    private long number_freeze_stones;
+    private long time_to_freeze;
+    private long time_to_unfreeze;
+
     public GameX() 
     {
         initComponents();
         visibleSidePanel(false);
+        this.Undo.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -217,8 +225,20 @@ public class GameX extends javax.swing.JFrame implements Observer
             System.out.println("EXITED OR CANCELED");
             return;
         }
+        
         this.board_size = p.getBoardSize();
         this.oponent_is_player = p.getOponent();
+        this.freeze_stones = p.getFreeze();
+        
+        if(freeze_stones)
+        {
+            FreezingStonesPanel freeze_panel = new FreezingStonesPanel();
+            JOptionPane.showMessageDialog(this,freeze_panel,"Settings for freezing stones",JOptionPane.PLAIN_MESSAGE);
+            freeze_panel.getFreezeStones();
+            this.number_freeze_stones = freeze_panel.getFreezeStones();
+            this.time_to_freeze = freeze_panel.getTimeToFreeze();
+            this.time_to_unfreeze = freeze_panel.getTimeToUnfreeze();
+        }
 
         if (boardX != null)
         {
@@ -297,12 +317,11 @@ public class GameX extends javax.swing.JFrame implements Observer
     // UNDO
     private void UndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UndoActionPerformed
         int[] num_stones = boardX.undoClicked(); // [blackstones,whitestones]
-        System.out.println("WHITE ON BOARD : "+num_stones[1]);
-        System.out.println("WHITE ON BOARD : "+num_stones[0]);
         BlackCount.setText(String.valueOf(num_stones[0]));
         this.game.getPlayer(false).setStoneNum(-(this.game.getPlayer(false).getStoneNum()-num_stones[0]),false);
         WhiteCount.setText(String.valueOf(num_stones[1]));
         this.game.getPlayer(true).setStoneNum(-(this.game.getPlayer(true).getStoneNum()-num_stones[1]),false);
+        this.Undo.setEnabled(false);
     }//GEN-LAST:event_UndoActionPerformed
     
     private void initGame()
@@ -417,6 +436,12 @@ public class GameX extends javax.swing.JFrame implements Observer
         visibleSidePanel(true);
         pack();
     }
+    
+    protected void enableUndo()
+    {
+        this.Undo.setEnabled(true);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BlackCount;
