@@ -53,6 +53,8 @@ public class GameX extends javax.swing.JFrame implements Observer
         Load = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         Quit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        Undo = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Othello");
@@ -60,7 +62,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
 
-        BoardX.setPreferredSize(new java.awt.Dimension(600, 600));
+        BoardX.setPreferredSize(new java.awt.Dimension(601, 601));
         BoardX.setLayout(new java.awt.BorderLayout());
 
         SideBar.setPreferredSize(new java.awt.Dimension(200, 600));
@@ -123,7 +125,7 @@ public class GameX extends javax.swing.JFrame implements Observer
                 .addComponent(BlackStones)
                 .addGap(18, 18, 18)
                 .addComponent(BlackCount)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(279, Short.MAX_VALUE))
         );
 
         jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -167,6 +169,19 @@ public class GameX extends javax.swing.JFrame implements Observer
         jMenu1.add(Quit);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Game");
+
+        Undo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        Undo.setText("Undo");
+        Undo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UndoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Undo);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -214,6 +229,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         boardX = new BoardX(this.board_size,game,this);
         BoardX.add(boardX).setVisible(true);
         this.boardX.loadField();
+        TurnPlayer.setText("Black");
         visibleSidePanel(true);
         pack();
     }//GEN-LAST:event_NewActionPerformed
@@ -278,6 +294,16 @@ public class GameX extends javax.swing.JFrame implements Observer
         else
             System.out.println("EXIT");
     }//GEN-LAST:event_LoadActionPerformed
+    // UNDO
+    private void UndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UndoActionPerformed
+        int[] num_stones = boardX.undoClicked(); // [blackstones,whitestones]
+        System.out.println("WHITE ON BOARD : "+num_stones[1]);
+        System.out.println("WHITE ON BOARD : "+num_stones[0]);
+        BlackCount.setText(String.valueOf(num_stones[0]));
+        this.game.getPlayer(false).setStoneNum(-(this.game.getPlayer(false).getStoneNum()-num_stones[0]),false);
+        WhiteCount.setText(String.valueOf(num_stones[1]));
+        this.game.getPlayer(true).setStoneNum(-(this.game.getPlayer(true).getStoneNum()-num_stones[1]),false);
+    }//GEN-LAST:event_UndoActionPerformed
     
     private void initGame()
     {
@@ -403,9 +429,11 @@ public class GameX extends javax.swing.JFrame implements Observer
     private javax.swing.JPanel SideBar;
     private javax.swing.JLabel Turn;
     private javax.swing.JLabel TurnPlayer;
+    private javax.swing.JMenuItem Undo;
     private javax.swing.JLabel WhiteCount;
     private javax.swing.JLabel WhiteStones;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables

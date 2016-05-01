@@ -85,6 +85,22 @@ public class FieldX extends javax.swing.JPanel {
             this.isWhite = false;
         }
     }
+    
+    protected boolean isEmpty()
+    {
+        return jLabel1.getIcon() == null;
+    }
+    
+    protected void removeStone()
+    {
+        jLabel1.setIcon(null);
+        jLabel1.revalidate();
+    }
+    
+    protected boolean isWhite()
+    {
+        return this.isWhite;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

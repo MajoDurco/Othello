@@ -39,11 +39,11 @@ public class Player extends Observable implements Serializable
         return player_pool==0?true:false;
     }
     
-    public void setStoneNum(int number)
+    public void setStoneNum(int number,boolean notify)
     {
         this.player_pool += number;
-        notifyAllObservers();
-        System.out.println("this.player_pool : "+ this.player_pool );
+        if (notify)
+            notifyAllObservers();
     }
     
     public int getStoneNum()
@@ -56,7 +56,7 @@ public class Player extends Observable implements Serializable
         if(this.canPutDisk(field))
         {
             int switched_stones = field.putDisk(new Disk(player_color));
-            setStoneNum(switched_stones+1); // have to add also the new
+            setStoneNum(switched_stones+1,true); // have to add also the new
             return (switched_stones); // return num of swaped without new one
         }
         return 0;

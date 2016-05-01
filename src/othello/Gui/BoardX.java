@@ -59,9 +59,9 @@ public class BoardX extends javax.swing.JPanel {
         }
         c.weighty = 1;
         c.weightx = 1;
-        JPanel filler = new JPanel();
-        filler.setOpaque(false);
-        this.add(filler,c);
+//        JPanel filler = new JPanel();
+//        filler.setOpaque(false);
+//        this.add(filler,c);
     }
     
     private void initStones()
@@ -102,11 +102,13 @@ public class BoardX extends javax.swing.JPanel {
         if (canPlaceStone(row,col)) // true
         {
             Field f1 = game.getBoard().getField(row, col);
+            if(!game.currentPlayer().isWhite()) // is black so its player
+                game.playerMove(); // save board for undo
             int swaped = this.game.currentPlayer().putDisk(f1);
             ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
             refactor();
             game.nextPlayer(); // on successful place the stone switch player
-            this.game.currentPlayer().setStoneNum(-swaped); // have to balansce the number of stones on the other side
+            this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
             if(checkEndGame())
                 gameX.endGame();
         }
@@ -143,7 +145,6 @@ public class BoardX extends javax.swing.JPanel {
             for(int x=1; x<=fields; x++)
             {
                 Disk f = b.getField(y, x).getDisk();    
-                FieldX fX = ar_fields[y-1][x-1];
                 if (f == null && canPlaceStone(y,x))
                     return false;
             }
@@ -170,6 +171,46 @@ public class BoardX extends javax.swing.JPanel {
                        fX.setStone(false);
                 }
             }
+    }
+    
+    protected int[] undoClicked()
+    {
+        int black=0;
+        int white=0;
+        int[] ret = {black,white};
+        
+        this.game.undo();
+        
+        Board b = game.getBoard();
+        for(int y=1; y<=fields; y++)
+            for(int x=1; x<=fields; x++)
+            {
+                Disk f = b.getField(y, x).getDisk();
+                FieldX fX = ar_fields[y-1][x-1];
+                if (!fX.isEmpty() && f==null)
+                { 
+                    fX.removeStone();
+                }
+                else
+                {
+                    if (f != null)
+                    { 
+                        if(f.isWhite())
+                        {
+                            fX.setStone(true);
+                            white++;
+                        }
+                        else
+                        {
+                            fX.setStone(false);
+                            black++;
+                        }
+                    }
+                }
+            }
+        ret[0] = black;
+        ret[1] = white;
+        return ret;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

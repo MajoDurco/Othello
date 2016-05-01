@@ -1,5 +1,9 @@
 package othello.Board;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Board implements Serializable
@@ -7,12 +11,14 @@ public class Board implements Serializable
     public Field[] board_array; // array of objects which implements interface Field
     protected int size;
     protected Rules rules;
+    private Field[] undo_board;
 
     public Board(Rules rules)
     {
         this.rules = rules;
         this.size = rules.getSize();
         this.board_array = new Field[(this.size + 2) * (this.size + 2)];
+        this.undo_board = new Field[(this.size + 2) * (this.size + 2)];
 
         for (int i = 0; i < size + 2; i++)
         {
@@ -59,10 +65,31 @@ public class Board implements Serializable
     {
         return this.rules;
     }
-
-    public static class field {
-
-        public field() {
-        }
+    
+    public void saveTurn()
+    {
+        this.undo_board  = (Field[])deepClone(this.board_array);
     }
+    
+    public void loadTurn()
+    {
+        if ( this.undo_board != null)
+            this.board_array = (Field[])deepClone(this.undo_board);
+    }
+    
+  public static Object deepClone(Object object) 
+  {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ObjectOutputStream oos = new ObjectOutputStream(baos);
+      oos.writeObject(object);
+      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+      ObjectInputStream ois = new ObjectInputStream(bais);
+      return ois.readObject();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

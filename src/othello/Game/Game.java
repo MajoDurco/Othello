@@ -92,4 +92,14 @@ public class Game extends Observable implements Serializable
              observer.update(this, null);
         }
     }
+    
+    public void playerMove()
+    {
+        this.board.saveTurn();
+    }
+    
+    public void undo()
+    {
+        this.board.loadTurn();
+    }
 }
