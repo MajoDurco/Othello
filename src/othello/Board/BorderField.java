@@ -38,4 +38,16 @@ public class BorderField implements Field, Serializable
     {
         return false;
     }
+
+    @Override
+    public void freezeField() {}
+
+    @Override
+    public void unFreezeField() {}
+
+    @Override
+    public boolean isFrozen() 
+    {
+        return false;
+    }
 }

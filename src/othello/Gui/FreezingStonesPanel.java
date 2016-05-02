@@ -8,17 +8,23 @@ public class FreezingStonesPanel extends javax.swing.JPanel {
     
     protected long getFreezeStones()
     {
-        return (long)freeze_stones.getValue();
+        if(freeze_stones.getValue()!=null)
+            return (long)freeze_stones.getValue();  
+        return 0;
     }
     
     protected long getTimeToFreeze()
     {
-        return (long)time_to_freeze.getValue();
+        if(time_to_freeze.getValue()!=null)
+            return (long)time_to_freeze.getValue();
+        return 0;
     }
         
     protected long getTimeToUnfreeze()
     {
-        return (long)time_to_unfreeze.getValue();
+        if(time_to_unfreeze.getValue()!=null)
+            return (long)time_to_unfreeze.getValue();
+        return 0;
     }
 
     @SuppressWarnings("unchecked")

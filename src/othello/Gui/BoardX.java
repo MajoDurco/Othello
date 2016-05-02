@@ -1,7 +1,8 @@
 package othello.Gui;
 
 import java.awt.GridBagConstraints;
-import javax.swing.JPanel;
+import java.util.ArrayList;
+import java.util.Random;
 import othello.Board.Board;
 import othello.Board.Disk;
 import othello.Board.Field;
@@ -12,12 +13,16 @@ public class BoardX extends javax.swing.JPanel {
     private final Game game;
     private FieldX[][] ar_fields;
     private final GameX gameX;
+    protected ArrayList<FieldX> freeze_fieldsX;
+    protected ArrayList<Field> freeze_fields;
     
     public BoardX(int fields,Game game,GameX gameX) 
     {
         this.fields = fields;
         this.game = game;
         this.gameX = gameX;
+        freeze_fieldsX = new ArrayList<>();
+        freeze_fields = new ArrayList<>();
 
         initComponents();
         initFields();
@@ -110,11 +115,13 @@ public class BoardX extends javax.swing.JPanel {
             int swaped = this.game.currentPlayer().putDisk(f1);
             ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
             refactor();
+            gameX.stopTimer();
             game.nextPlayer(); // on successful place the stone switch player
             this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
             if(checkEndGame())
                 gameX.endGame();
-        }
+            gameX.startTimer();
+         }
     }
     
     private boolean canPlaceStone(int row,int col)
@@ -214,6 +221,56 @@ public class BoardX extends javax.swing.JPanel {
         ret[0] = black;
         ret[1] = white;
         return ret;
+    }
+    
+    protected ArrayList<FieldX> getOccupiedFields()
+    {
+        ArrayList<FieldX> occupied_fields = new ArrayList<>();
+        for(int y=1; y<=fields; y++)
+            for(int x=1; x<=fields; x++)
+            {
+                FieldX fX = ar_fields[y-1][x-1];
+                if (!fX.isEmpty())
+                { 
+                    occupied_fields.add(fX);
+                }
+            }
+        return occupied_fields;
+    } 
+
+    protected void freezeStones(long count)
+    {
+       ArrayList<FieldX> occupied_fields = getOccupiedFields();
+       Random randomGenerator = new Random();
+       System.out.println("FreezeStones:");
+       if(count > occupied_fields.size())
+           count = occupied_fields.size();
+       for(int i=0; i<count; i++)
+        {
+            int index = randomGenerator.nextInt(occupied_fields.size());
+            FieldX occupied_field = occupied_fields.get(index);
+            occupied_field.freezeField();
+            freeze_fieldsX.add(occupied_field);
+            Field f = this.game.getBoard().getField(occupied_field.row, occupied_field.col);
+            f.freezeField();
+            freeze_fields.add(f);
+            occupied_fields.remove(index);
+        }
+    }
+    
+    protected void unFreezeStones()
+    {
+       System.out.println("UnFreezeStones:");
+       for(FieldX f:freeze_fieldsX)
+       {
+        f.unFreezeField();
+       }
+       freeze_fieldsX.clear();
+       
+       for(Field f:freeze_fields)
+       {
+        f.unFreezeField();
+       }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

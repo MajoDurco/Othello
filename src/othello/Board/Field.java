@@ -12,4 +12,7 @@ public interface Field
     int putDisk(Disk disk);
     boolean isEmpty();
     boolean canPutDisk(Disk disk);
+    void freezeField();
+    void unFreezeField();
+    boolean isFrozen();
 }

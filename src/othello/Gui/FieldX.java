@@ -1,16 +1,20 @@
 package othello.Gui;
 
+import java.awt.Color;
+
 public class FieldX extends javax.swing.JPanel {
     private final int[] size;
-    private final int[] color;
-    int row;
-    int col;
+    private final int even_position;
+    protected int row;
+    protected int col;
     private BoardX board;
     protected boolean isWhite;
+
     
     public FieldX(int row,int col,int dimension,int even,BoardX board) {
         this.size = calcSizeOfField(dimension);
-        this.color = setFieldColor(even);
+        this.even_position = even;
+        setFieldColor();
         this.row = row;
         this.col = col;
         this.board = board;
@@ -23,7 +27,6 @@ public class FieldX extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(color[0],color[1],color[2]));
         setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setPreferredSize(new java.awt.Dimension(size[0],size[1]));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -65,11 +68,12 @@ public class FieldX extends javax.swing.JPanel {
         return a;
     }
     
-    private int[] setFieldColor(int even)
+    private void setFieldColor()
     {
-        int[] dark = {46,195,16};
-        int[] light = {0,255,34};
-        return even==0?light:dark;
+        if (even_position==1)
+            setBackground(new Color(46,195,16));
+        else
+            setBackground(new Color(0,255,34));   
     }
     
     protected void setStone(boolean white)
@@ -100,6 +104,16 @@ public class FieldX extends javax.swing.JPanel {
     protected boolean isWhite()
     {
         return this.isWhite;
+    }
+    
+    protected void freezeField()
+    {
+        setBackground(new Color(95,95,95));
+    }
+    
+    protected void unFreezeField()
+    {
+        setFieldColor();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

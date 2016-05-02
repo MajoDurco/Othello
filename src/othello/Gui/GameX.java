@@ -1,5 +1,7 @@
 package othello.Gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,10 +10,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JDialog;
+import java.util.Random;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import othello.Board.Board;
 import othello.Game.Game;
@@ -30,10 +32,12 @@ public class GameX extends javax.swing.JFrame implements Observer
     private int board_size;
     private boolean oponent_is_player;
     private boolean freeze_stones;
+
+    protected long number_freeze_stones;
+    protected long time_to_freeze;
+    protected long time_to_unfreeze;
     
-    private long number_freeze_stones;
-    private long time_to_freeze;
-    private long time_to_unfreeze;
+    protected Timer timer;
 
     public GameX() 
     {
@@ -67,7 +71,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Othello");
         setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Pictures/othello_icon.png")).getImage());
-        setPreferredSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(815, 615));
         setResizable(false);
 
         BoardX.setPreferredSize(new java.awt.Dimension(601, 601));
@@ -236,8 +240,8 @@ public class GameX extends javax.swing.JFrame implements Observer
             JOptionPane.showMessageDialog(this,freeze_panel,"Settings for freezing stones",JOptionPane.PLAIN_MESSAGE);
             freeze_panel.getFreezeStones();
             this.number_freeze_stones = freeze_panel.getFreezeStones();
-            this.time_to_freeze = freeze_panel.getTimeToFreeze();
-            this.time_to_unfreeze = freeze_panel.getTimeToUnfreeze();
+            this.time_to_freeze = freeze_panel.getTimeToFreeze()*1000;
+            this.time_to_unfreeze = freeze_panel.getTimeToUnfreeze()*1000;
         }
 
         if (boardX != null)
@@ -250,8 +254,9 @@ public class GameX extends javax.swing.JFrame implements Observer
         BoardX.add(boardX).setVisible(true);
         this.boardX.loadField();
         TurnPlayer.setText("Black");
-        visibleSidePanel(true);
+        visibleSidePanel(true); 
         pack();
+        startTimer();
     }//GEN-LAST:event_NewActionPerformed
     // SAVE
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveActionPerformed
@@ -442,6 +447,43 @@ public class GameX extends javax.swing.JFrame implements Observer
         this.Undo.setEnabled(true);
     }
     
+    protected static int count_timer = 0;
+    protected ActionListener action = new ActionListener()
+    {   
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            count_timer++;
+            if(count_timer == 2)
+            {
+                System.out.println("Exiting timer");
+                stopTimer();
+            }
+            else
+                boardX.freezeStones(number_freeze_stones);
+        }
+    };
+    
+    protected void stopTimer()
+    {
+       timer.stop();
+       boardX.unFreezeStones();
+       count_timer = 0; 
+    }
+    
+    protected void startTimer()
+    {
+      if(freeze_stones)
+        {
+            Random number = new Random();
+            // TODO ak je zadane cislo zaporne atd...
+            int unfreeze = number.nextInt((int)time_to_unfreeze);
+            timer = new Timer(unfreeze,action);
+            int initdelay = number.nextInt((int)time_to_freeze);
+            timer.setInitialDelay(initdelay);
+            System.out.println("Initial delay: " +initdelay + " Time to Unfreeze :" + unfreeze );
+            timer.start();
+        }  
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BlackCount;

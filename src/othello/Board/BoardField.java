@@ -10,10 +10,13 @@ public class BoardField implements Field, Serializable
     protected Disk stone = null;
     protected Field[] field_surround = new Field[8];
     private ArrayList<Field> ar_list;
+    private boolean is_frozen;
+    
     public BoardField(int row,int col)
     {
         this.row = row;
         this.col = col;
+        this.is_frozen=false;
         ar_list = new ArrayList<>();
     }
 
@@ -73,7 +76,7 @@ public class BoardField implements Field, Serializable
             if(field_surround[i].getDisk()!=null)
             {
                 Field tmp = field_surround[i];
-                if(disk.isWhite()!=tmp.getDisk().isWhite()) // farba sa nezhoduje prehladame dalej v tom smere
+                if(disk.isWhite()!=tmp.getDisk().isWhite() && !tmp.isFrozen()) // farba sa nezhoduje prehladame dalej v tom smere
                 {
                     ar_list.add(tmp); // pridam kamen do listu
                     new_counter+=1;
@@ -81,12 +84,12 @@ public class BoardField implements Field, Serializable
                     tmp = tmp.nextField(dir); // nastavim dalsi kamen v smere
                     while(true)
                     {// najdem rovnaku farbu(true)
-                        if(tmp.getDisk()==null) // najdem prazdne policko false
+                        if(tmp.getDisk()==null || tmp.isFrozen()) // najdem prazdne policko false
                         {
                             roolback=true;
                             break;
                         }
-                        else if (tmp.getDisk().isWhite() == disk.isWhite()) // som v nejakom smere nasiel rovnaku farbu ako aj vkladam
+                        else if (tmp.getDisk().isWhite() == disk.isWhite() && !tmp.isFrozen()) // som v nejakom smere nasiel rovnaku farbu ako aj vkladam
                         {
                             old_counter=new_counter;
                             return_value=true;
@@ -146,5 +149,22 @@ public class BoardField implements Field, Serializable
         result = 31 * result + col;
         result = 31 * result + (stone != null ? stone.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public void freezeField() 
+    {
+        is_frozen=true;
+    }
+
+    @Override
+    public void unFreezeField() 
+    {
+       is_frozen=false; 
+    }
+    
+    public boolean isFrozen()
+    {
+        return this.is_frozen;
     }
 }
