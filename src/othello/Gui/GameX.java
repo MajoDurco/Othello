@@ -31,11 +31,11 @@ public class GameX extends javax.swing.JFrame implements Observer
     private Player p2;
     private int board_size;
     private boolean oponent_is_player;
-    private boolean freeze_stones;
-
-    protected long number_freeze_stones;
-    protected long time_to_freeze;
-    protected long time_to_unfreeze;
+    
+    protected boolean freeze_stones = false;
+    protected long number_freeze_stones = 0;
+    protected long time_to_freeze = 0;
+    protected long time_to_unfreeze = 0;
     
     protected Timer timer;
 
@@ -44,6 +44,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         initComponents();
         visibleSidePanel(false);
         this.Undo.setEnabled(false);
+        this.Save.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -234,14 +235,18 @@ public class GameX extends javax.swing.JFrame implements Observer
         this.oponent_is_player = p.getOponent();
         this.freeze_stones = p.getFreeze();
         
+        long[] constants = new long[3];
         if(freeze_stones)
         {
             FreezingStonesPanel freeze_panel = new FreezingStonesPanel();
             JOptionPane.showMessageDialog(this,freeze_panel,"Settings for freezing stones",JOptionPane.PLAIN_MESSAGE);
-            freeze_panel.getFreezeStones();
-            this.number_freeze_stones = freeze_panel.getFreezeStones();
-            this.time_to_freeze = freeze_panel.getTimeToFreeze()*1000;
-            this.time_to_unfreeze = freeze_panel.getTimeToUnfreeze()*1000;
+            constants[0] = freeze_panel.getFreezeStones();
+            constants[1] = freeze_panel.getTimeToFreeze();
+            constants[2] = freeze_panel.getTimeToUnfreeze();
+            this.number_freeze_stones = constants[0];
+            this.time_to_freeze = constants[1]*1000;
+            this.time_to_unfreeze = constants[2]*1000;
+            checkFreezeConstants();
         }
 
         if (boardX != null)
@@ -254,9 +259,13 @@ public class GameX extends javax.swing.JFrame implements Observer
         BoardX.add(boardX).setVisible(true);
         this.boardX.loadField();
         TurnPlayer.setText("Black");
+        game.setFreezeStones(freeze_stones);
+        game.setFreezeConstants(constants);
+        enableSave();
         visibleSidePanel(true); 
         pack();
-        startTimer();
+        if(freeze_stones)
+            startTimer();
     }//GEN-LAST:event_NewActionPerformed
     // SAVE
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveActionPerformed
@@ -309,6 +318,7 @@ public class GameX extends javax.swing.JFrame implements Observer
                 {
                     this.game_serialized = (Game) in_file_stream.readObject();
                     loadGame();
+                    enableSave();
                 }
             }
             catch (IOException | ClassNotFoundException exc)
@@ -413,8 +423,8 @@ public class GameX extends javax.swing.JFrame implements Observer
         this.rules = new ReversiRules(this.board_size);
         this.board = this.game_serialized.getBoard();
         this.game = new Game(this.board);
- 
-       // TODO AI PLAYER 2 (computer)
+
+        // TODO AI PLAYER 2 (computer)
         p1 = new Player(true); // WHITE
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
@@ -424,9 +434,18 @@ public class GameX extends javax.swing.JFrame implements Observer
         p2.attach(this);
 
         if(this.game_serialized.currentPlayer().isWhite())
-        this.game.nextPlayer();// White
+            this.game.nextPlayer();// White
+        
+        freeze_stones = game_serialized.getFreezeStones();
+        game.setFreezeStones(freeze_stones);
+        
+        long[] constants = game_serialized.getFreezeConstants();
+        number_freeze_stones = constants[0];
+        time_to_freeze = constants[1]*1000;
+        time_to_unfreeze = constants[2]*1000;
+        game.setFreezeConstants(constants);
 
-        //        this.oponent_is_player = p.getOponent(); TODO
+        //this.oponent_is_player = p.getOponent(); TODO
         if (boardX != null)
         {
             BoardX.remove(boardX);
@@ -440,11 +459,18 @@ public class GameX extends javax.swing.JFrame implements Observer
         BlackCount.setText(String.valueOf(black_pool));
         visibleSidePanel(true);
         pack();
+        if(freeze_stones)
+            startTimer();
     }
     
     protected void enableUndo()
     {
         this.Undo.setEnabled(true);
+    }
+    
+    private void enableSave()
+    {
+        this.Save.setEnabled(true);
     }
     
     protected static int count_timer = 0;
@@ -475,7 +501,6 @@ public class GameX extends javax.swing.JFrame implements Observer
       if(freeze_stones)
         {
             Random number = new Random();
-            // TODO ak je zadane cislo zaporne atd...
             int unfreeze = number.nextInt((int)time_to_unfreeze);
             timer = new Timer(unfreeze,action);
             int initdelay = number.nextInt((int)time_to_freeze);
@@ -483,6 +508,12 @@ public class GameX extends javax.swing.JFrame implements Observer
             System.out.println("Initial delay: " +initdelay + " Time to Unfreeze :" + unfreeze );
             timer.start();
         }  
+    }
+    
+    private void checkFreezeConstants()
+    {
+        if(this.number_freeze_stones<0 || this.time_to_freeze<0 || this.time_to_unfreeze<0 ) 
+            this.freeze_stones=false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

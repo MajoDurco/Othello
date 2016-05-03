@@ -115,12 +115,14 @@ public class BoardX extends javax.swing.JPanel {
             int swaped = this.game.currentPlayer().putDisk(f1);
             ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
             refactor();
-            gameX.stopTimer();
+            if(gameX.freeze_stones)
+                gameX.stopTimer();
             game.nextPlayer(); // on successful place the stone switch player
             this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
             if(checkEndGame())
                 gameX.endGame();
-            gameX.startTimer();
+            if(gameX.freeze_stones)
+                gameX.startTimer();
          }
     }
     

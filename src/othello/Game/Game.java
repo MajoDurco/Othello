@@ -2,6 +2,7 @@ package othello.Game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -14,7 +15,10 @@ public class Game extends Observable implements Serializable
     private Player black_P;
     private Player turn;
     
-    private final transient List<Observer> observers = new ArrayList<>();
+    private boolean freeze_stones=false;
+    long [] constants = new long[3];
+
+        private final transient List<Observer> observers = new ArrayList<>();
 
     public Game(Board board)
     {
@@ -101,5 +105,27 @@ public class Game extends Observable implements Serializable
     public void undo()
     {
         this.board.loadTurn();
+    }
+
+    public void setFreezeConstants(long[] constants) // [number_freeze_stones,time_to_freeze,time_to_unfreeze]
+    {
+        System.arraycopy(constants, 0, this.constants, 0, this.constants.length);
+    }
+    
+    public long[] getFreezeConstants()
+    {
+        long[] constants = new long[3];
+        System.arraycopy(this.constants, 0, constants, 0, this.constants.length);
+        return constants;
+    }
+    
+    public void setFreezeStones(boolean freeze)
+    {
+        freeze_stones=freeze;
+    }
+    
+    public boolean getFreezeStones()
+    {
+        return freeze_stones;
     }
 }
