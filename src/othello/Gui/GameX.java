@@ -31,6 +31,7 @@ public class GameX extends javax.swing.JFrame implements Observer
     private Player p2;
     private int board_size;
     private boolean oponent_is_player;
+    private boolean is_easy_diff;
     
     protected boolean freeze_stones = false;
     protected long number_freeze_stones = 0;
@@ -233,6 +234,12 @@ public class GameX extends javax.swing.JFrame implements Observer
         
         this.board_size = p.getBoardSize();
         this.oponent_is_player = p.getOponent();
+        if(!this.oponent_is_player) // AI
+        {
+            AIDifficulty dific = new AIDifficulty();
+            JOptionPane.showMessageDialog(this,dific,"Choose Difficulty",JOptionPane.PLAIN_MESSAGE);
+            this.is_easy_diff=dific.getDifficulty();
+        }
         this.freeze_stones = p.getFreeze();
         
         long[] constants = new long[3];

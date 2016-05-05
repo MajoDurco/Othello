@@ -153,13 +153,22 @@ public class BoardX extends javax.swing.JPanel {
     private boolean checkEndGame()
     {
         Board b = game.getBoard();
+        boolean next_player_move=false;
         for(int y=1; y<=fields; y++)
             for(int x=1; x<=fields; x++)
             {
-                Disk f = b.getField(y, x).getDisk();    
+                Disk f = b.getField(y, x).getDisk();        
                 if (f == null && canPlaceStone(y,x))
                     return false;
+                if (f == null && (game.getPlayer(!game.currentPlayer().isWhite()).canPutDisk(b.getField(y,x))))
+                    next_player_move=true;
+
             }
+        if(next_player_move)
+        {
+            game.nextPlayer(); // switch player
+            return false;
+        }
         // if all stones on the board is equal to board_size*board_size
         int sum = gameX.getPlayerScore(true) + gameX.getPlayerScore(false);
         if(sum == this.fields*this.fields)
