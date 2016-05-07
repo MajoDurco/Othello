@@ -83,7 +83,7 @@
       <Connection code="new javax.swing.ImageIcon(getClass().getResource(&quot;/Pictures/othello_icon.png&quot;)).getImage()" type="code"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[815, 615]"/>
+      <Dimension value="[800, 600]"/>
     </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
@@ -125,7 +125,7 @@
     <Container class="javax.swing.JPanel" name="BoardX">
       <Properties>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[601, 601]"/>
+          <Dimension value="[600, 600]"/>
         </Property>
       </Properties>
 

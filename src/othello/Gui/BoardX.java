@@ -119,13 +119,40 @@ public class BoardX extends javax.swing.JPanel {
                 gameX.endGame();
             if(gameX.freeze_stones)
                 gameX.startTimer();
+            if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())  // player is AI
+            {
+                // sent message to AI
+            }
          }
+    }
+    
+    public void moveAI(int row,int col)
+    {
+        Field f1 = game.getBoard().getField(row, col);
+        if(!this.game.currentPlayer().canPutDisk(f1))
+            return;
+        int swaped = this.game.currentPlayer().putDisk(f1);
+        ar_fields[row-1][col-1].setStone(game.currentPlayer().isWhite());
+        refactor();
+        if(gameX.freeze_stones)
+            gameX.stopTimer();
+        game.nextPlayer(); // on successful place the stone switch player
+        this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
+        if(checkEndGame())
+            gameX.endGame();
+        if(gameX.freeze_stones)
+            gameX.startTimer();
     }
     
     private boolean canPlaceStone(int row,int col)
     {
-        Field f1 = game.getBoard().getField(row, col);
-        return this.game.currentPlayer().canPutDisk(f1);
+        if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite()) // AI's turn
+            return false;
+        else
+        {
+            Field f1 = game.getBoard().getField(row, col);
+            return this.game.currentPlayer().canPutDisk(f1);
+        }
     }
     
     private void refactor()

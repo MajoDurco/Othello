@@ -73,10 +73,10 @@ public class GameX extends javax.swing.JFrame implements Observer
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Othello");
         setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Pictures/othello_icon.png")).getImage());
-        setPreferredSize(new java.awt.Dimension(815, 615));
+        setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
 
-        BoardX.setPreferredSize(new java.awt.Dimension(601, 601));
+        BoardX.setPreferredSize(new java.awt.Dimension(600, 600));
         BoardX.setLayout(new java.awt.BorderLayout());
 
         SideBar.setPreferredSize(new java.awt.Dimension(200, 600));
@@ -522,7 +522,16 @@ public class GameX extends javax.swing.JFrame implements Observer
         if(this.number_freeze_stones<0 || this.time_to_freeze<0 || this.time_to_unfreeze<0 ) 
             this.freeze_stones=false;
     }
+    
+    public boolean getAIDiff()
+    {
+       return this.is_easy_diff;
+    }
 
+    public boolean getOponentIsPlayer()
+    {
+       return this.oponent_is_player;         
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BlackCount;
     private javax.swing.JLabel BlackStones;
