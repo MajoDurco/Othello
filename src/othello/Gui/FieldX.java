@@ -49,20 +49,20 @@ public class FieldX extends javax.swing.JPanel {
         switch (dimension)
         {
             case 6:
-                a[0]=98;
-                a[1]=96;
+                a[0]=97;
+                a[1]=95;
                 return a;
             case 8:
-                a[0]=74;
-                a[1]=72;
+                a[0]=73;
+                a[1]=71;
                 return a;
             case 10:
-                a[0]=59;
-                a[1]=57;
+                a[0]=58;
+                a[1]=56;
                 return a;
             case 12:
-                a[0]=49;
-                a[1]=48;
+                a[0]=48;
+                a[1]=47;
                 return a;
         }
         return a;

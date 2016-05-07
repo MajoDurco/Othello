@@ -50,7 +50,6 @@ public class BoardX extends javax.swing.JPanel {
         {
           c.gridx = x;
           c.gridy = y;
-          c.fill = GridBagConstraints.BOTH;
           FieldX f = new FieldX(y+1,x+1,fields,y%2==0?x%2:(x+1)%2,this);
           ar_fields[y][x]=f;
           this.add(f,c);
@@ -64,9 +63,6 @@ public class BoardX extends javax.swing.JPanel {
         }
         c.weighty = 1;
         c.weightx = 1;
-//        JPanel filler = new JPanel();
-//        filler.setOpaque(false);
-//        this.add(filler,c);
     }
     
     private void initStones()
