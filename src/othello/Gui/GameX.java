@@ -19,6 +19,7 @@ import othello.Board.Board;
 import othello.Game.Game;
 import othello.Game.Player;
 import othello.Game.ReversiRules;
+import othello.othelloAI.othelloAI;
 
 /**
  * GUI representation of game
@@ -32,6 +33,7 @@ public class GameX extends javax.swing.JFrame implements Observer
     private BoardX boardX;
     private Player p1;
     private Player p2;
+    private othelloAI ai1;
     private int board_size;
     private boolean oponent_is_player;
     private boolean is_easy_diff;
@@ -272,8 +274,13 @@ public class GameX extends javax.swing.JFrame implements Observer
         BoardX.add(boardX).setVisible(true);
         this.boardX.loadField();
         TurnPlayer.setText("Black");
+        if(!this.oponent_is_player)
+            ai1 = new othelloAI(getAIDiff(), boardX);
         game.setFreezeStones(freeze_stones);
         game.setFreezeConstants(constants);
+        game.setOponentIsPlayer(oponent_is_player);
+        game.setIsEasyDiff(is_easy_diff);
+
         enableSave();
         visibleSidePanel(true); 
         pack();
@@ -357,7 +364,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         this.rules = new ReversiRules(this.board_size);
         this.board = new Board(this.rules);
         this.game = new Game(this.board);
-        // TODO AI PLAYER 2 (computer)
+
         p1 = new Player(true); // WHITE
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
@@ -444,17 +451,21 @@ public class GameX extends javax.swing.JFrame implements Observer
         this.board = this.game_serialized.getBoard();
         this.game = new Game(this.board);
 
-        // TODO AI PLAYER 2 (computer)
         p1 = new Player(true); // WHITE
+        if(!this.oponent_is_player)
+            ai1 = new othelloAI(getAIDiff(), boardX);
         p2 = new Player(false); // BLACK
         game.addPlayer(p1);
         game.addPlayer(p2);
         game.attach(this); // attach observers
         p1.attach(this);
         p2.attach(this);
+        
+        this.game.getPlayer(false).setStoneNum(black_pool-2,false);
+        this.game.getPlayer(true).setStoneNum(white_pool-2,false);
 
         if(this.game_serialized.currentPlayer().isWhite())
-            this.game.nextPlayer();// White
+            this.game.nextPlayer();
         
         freeze_stones = game_serialized.getFreezeStones();
         game.setFreezeStones(freeze_stones);
@@ -465,7 +476,11 @@ public class GameX extends javax.swing.JFrame implements Observer
         time_to_unfreeze = constants[2]*1000;
         game.setFreezeConstants(constants);
 
-        //this.oponent_is_player = p.getOponent(); TODO
+        oponent_is_player = game_serialized.getOponentIsPlayer();
+        is_easy_diff = game_serialized.getIsEasyDiff();
+        game.setOponentIsPlayer(oponent_is_player);
+        game.setIsEasyDiff(is_easy_diff);
+
         if (boardX != null)
         {
             BoardX.remove(boardX);
@@ -475,6 +490,9 @@ public class GameX extends javax.swing.JFrame implements Observer
         boardX.loadField();
         BoardX.add(boardX).setVisible(true);
         this.boardX.loadField();
+        if(!this.oponent_is_player){
+            ai1 = new othelloAI(getAIDiff(), boardX);
+        }
         WhiteCount.setText(String.valueOf(white_pool));
         BlackCount.setText(String.valueOf(black_pool));
         visibleSidePanel(true);
@@ -563,6 +581,11 @@ public class GameX extends javax.swing.JFrame implements Observer
     public boolean getOponentIsPlayer()
     {
        return this.oponent_is_player;         
+    }
+    
+    public othelloAI getAI()
+    {
+        return this.ai1;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BlackCount;

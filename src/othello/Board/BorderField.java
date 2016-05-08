@@ -38,6 +38,24 @@ public class BorderField implements Field, Serializable
     {
         return false;
     }
+    
+    @Override
+    public int array_size()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int get_row()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int get_col()
+    {
+        return 0;
+    }
 
     @Override
     public void freezeField() {}

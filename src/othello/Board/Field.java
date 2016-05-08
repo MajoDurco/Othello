@@ -15,4 +15,7 @@ public interface Field
     void freezeField();
     void unFreezeField();
     boolean isFrozen();
+    int array_size();
+    int get_row();
+    int get_col();
 }

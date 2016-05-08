@@ -2,7 +2,6 @@ package othello.Game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,6 +16,9 @@ public class Game extends Observable implements Serializable
     
     private boolean freeze_stones=false;
     long [] constants = new long[3];
+    
+    private boolean oponent_is_player;
+    private boolean is_easy_diff;
 
         private final transient List<Observer> observers = new ArrayList<>();
 
@@ -127,5 +129,25 @@ public class Game extends Observable implements Serializable
     public boolean getFreezeStones()
     {
         return freeze_stones;
+    }
+    
+    public void setOponentIsPlayer(boolean oponent)
+    {
+        this.oponent_is_player=oponent;
+    }
+    
+    public boolean getOponentIsPlayer()
+    {
+        return this.oponent_is_player;
+    }
+    
+    public void setIsEasyDiff(boolean diff)
+    {
+        this.is_easy_diff=diff;
+    }
+    
+    public boolean getIsEasyDiff()
+    {
+        return this.is_easy_diff;
     }
 }

@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Othello" default="default" basedir=".">
 <description>The Othello game</description>
-    <import file="nbproject/build-impl.xml"/>
 
 	<property name="src" location="src"/>
 	<property name="lib" location="lib"/>
         <property name="build" location="build"/>
+	<property name="jar" location="build/jar"/>
+	<property name="doc" location="doc"/>
 
 	<property name="main-class" value="othello.Othello" />
 
-    <path id="classpath">
-        <fileset dir="${lib}" includes="*.jar" />
-    </path>
+   	<path id="classpath">
+        	<fileset dir="${jar}" includes="**/*.jar" />
+   	</path>
 
 	<target name="clean" description="Clean up">
-        <delete dir="${build}"/>
+	<delete includeEmptyDirs="true">
+  		<fileset dir="${build}" includes="**/*" defaultexcludes="no"/>
+	</delete>
 	</target>
 
-	<target name="compile" description="Make compilation">
-		<mkdir dir="${build}"/>
-        <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+	<target name="compile" depends="doc" description="Make compilation">
+		
+        	<javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
 	</target>
 
-    <target name="jar" depends="compile">
-        <mkdir dir="${build}"/>
-        <jar destfile="${build}/Othello.jar" basedir="${build}">
-            <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
+    	<target name="jar" depends="compile">
+		<jar jarfile="${jar}/Othello.jar" basedir="${build}">
+            		<manifest>
+               			<attribute name="Main-Class" value="${main-class}"/>
+            		</manifest>
+			<fileset dir="${lib}">
+				<include name="**/*.png" />
+			</fileset>
+        	</jar>
+    	</target>
 
-		<fileset dir="${src}/othello/Pictures">
-			<include name="*.png" />
-		</fileset>
-        </jar>
-    </target>
+	<target name="doc" description="generate documentation">
+    		<javadoc sourcepath="${src}" destdir="${doc}"/>
+  	</target>
 
-    <target name="run" depends="jar" description= "Do test">
-        <java classname="${main-class}" fork="true">
-            <classpath>
-                <path refid="classpath" />
-                <path location="${build}/Othello.jar"/>
-            </classpath>
-        </java>
-    </target>
-
+	<target name="run" depends="jar" description= "RUN">
+        	<java jar="${jar}/Othello.jar" fork="true"/>
+    	</target>
 </project>

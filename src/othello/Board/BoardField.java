@@ -127,6 +127,24 @@ public class BoardField implements Field, Serializable
         }
         return return_value;
     }
+    
+    @Override
+    public int array_size()
+    {
+        return ar_list.size();
+    }
+    
+    @Override
+    public int get_row()
+    {
+        return this.row;
+    }
+    
+    @Override
+    public int get_col()
+    {
+        return this.col;
+    }
 
     @Override
     public boolean equals(java.lang.Object obj)

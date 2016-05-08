@@ -7,6 +7,7 @@ import othello.Board.Board;
 import othello.Board.Disk;
 import othello.Board.Field;
 import othello.Game.Game;
+import othello.othelloAI.othelloAI;
 
 /**
  * Panel for the main board of the game
@@ -16,6 +17,7 @@ public class BoardX extends javax.swing.JPanel {
     private final Game game;
     private FieldX[][] ar_fields;
     private final GameX gameX;
+    private othelloAI art_int;
     protected ArrayList<FieldX> freeze_fieldsX;
     protected ArrayList<Field> freeze_fields;
     
@@ -138,8 +140,9 @@ public class BoardX extends javax.swing.JPanel {
                 gameX.startTimer();
             if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())  // player is AI
             {
-                // sent message to AI
-            }
+                this.art_int = gameX.getAI();
+                art_int.getFieldAI(game);
+            } 
          }
     }
     
@@ -207,6 +210,11 @@ public class BoardX extends javax.swing.JPanel {
         if(next_player_move)
         {
             game.nextPlayer(); // switch player
+            if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())  // player is AI
+            {
+                this.art_int = gameX.getAI();
+                art_int.getFieldAI(game);
+            } 
             return false;
         }
         // if all stones on the board is equal to board_size*board_size
