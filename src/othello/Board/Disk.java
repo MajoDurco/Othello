@@ -2,15 +2,28 @@ package othello.Board;
 
 import java.io.Serializable;
 
+/**
+ * Disk or stone in the game
+ */
 public class Disk implements Serializable
 {
     protected boolean isWhite; // color of the disk, true == white, false == blacks
+
+    /**
+     * Create disk
+     * @param isWhite
+     */
     public Disk(boolean isWhite)
     {
         this.isWhite=isWhite;
     }
 
     // true if disk is white
+
+    /**
+     * Check disk's color
+     * @return
+     */
     public boolean isWhite()
     {
         if(this.isWhite)
@@ -19,8 +32,9 @@ public class Disk implements Serializable
         }
         return false;
     }
-
-    // switch the disk color
+    /**
+     * Switch disk color
+     */
     public void turn()
     {
         this.isWhite = !this.isWhite;

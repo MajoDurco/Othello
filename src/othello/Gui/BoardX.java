@@ -8,6 +8,9 @@ import othello.Board.Disk;
 import othello.Board.Field;
 import othello.Game.Game;
 
+/**
+ * Panel for the main board of the game
+ */
 public class BoardX extends javax.swing.JPanel {
     private final int fields;
     private final Game game;
@@ -16,6 +19,12 @@ public class BoardX extends javax.swing.JPanel {
     protected ArrayList<FieldX> freeze_fieldsX;
     protected ArrayList<Field> freeze_fields;
     
+    /**
+     * Create board, initialize fields,stones
+     * @param fields Number of fields in board
+     * @param game The game
+     * @param gameX The GUI game
+     */
     public BoardX(int fields,Game game,GameX gameX) 
     {
         this.fields = fields;
@@ -98,10 +107,18 @@ public class BoardX extends javax.swing.JPanel {
     }
     
     // this col and row starts from [1,1]
+
+    /**
+     * Result of click listener on field
+     * @param row Row of clicked field
+     * @param col Col of clicked field
+     */
     protected void clickPerformed(int row,int col)
     {
         if (canPlaceStone(row,col)) // true
         {
+            if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())
+                return;
             Field f1 = game.getBoard().getField(row, col);
             if(!game.currentPlayer().isWhite()) // is black so its player
             {
@@ -126,6 +143,11 @@ public class BoardX extends javax.swing.JPanel {
          }
     }
     
+    /**
+     * Places stones for AI
+     * @param row Row where place stone
+     * @param col Col where place stone
+     */
     public void moveAI(int row,int col)
     {
         Field f1 = game.getBoard().getField(row, col);
@@ -146,13 +168,8 @@ public class BoardX extends javax.swing.JPanel {
     
     private boolean canPlaceStone(int row,int col)
     {
-        if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite()) // AI's turn
-            return false;
-        else
-        {
             Field f1 = game.getBoard().getField(row, col);
             return this.game.currentPlayer().canPutDisk(f1);
-        }
     }
     
     private void refactor()
@@ -199,6 +216,9 @@ public class BoardX extends javax.swing.JPanel {
         return true;
     }
     
+    /**
+     *  Load the state of fields
+     */
     protected void loadField()
     {
         Board b = game.getBoard();
@@ -217,6 +237,10 @@ public class BoardX extends javax.swing.JPanel {
             }
     }
     
+    /**
+     * Calculate the right score after undo
+     * @return Sum each stones on the board
+     */
     protected int[] undoClicked()
     {
         int black=0;
@@ -257,6 +281,10 @@ public class BoardX extends javax.swing.JPanel {
         return ret;
     }
     
+    /**
+     * Get occupied fields by stones
+     * @return Fields on which is stone
+     */
     protected ArrayList<FieldX> getOccupiedFields()
     {
         ArrayList<FieldX> occupied_fields = new ArrayList<>();
@@ -272,6 +300,10 @@ public class BoardX extends javax.swing.JPanel {
         return occupied_fields;
     } 
 
+    /**
+     * Freeze stones
+     * @param count Number of stones to freeze
+     */
     protected void freezeStones(long count)
     {
        ArrayList<FieldX> occupied_fields = getOccupiedFields();
@@ -292,6 +324,9 @@ public class BoardX extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Unfreeze stones
+     */
     protected void unFreezeStones()
     {
        System.out.println("UnFreezeStones:");

@@ -20,6 +20,9 @@ import othello.Game.Game;
 import othello.Game.Player;
 import othello.Game.ReversiRules;
 
+/**
+ * GUI representation of game
+ */
 public class GameX extends javax.swing.JFrame implements Observer
 {
     private ReversiRules rules; 
@@ -40,6 +43,9 @@ public class GameX extends javax.swing.JFrame implements Observer
     
     protected Timer timer;
 
+    /**
+     * Create main frame of the whole game
+     */
     public GameX() 
     {
         initComponents();
@@ -399,11 +405,18 @@ public class GameX extends javax.swing.JFrame implements Observer
             return;
     }
 
+    /**
+     * @param white_player Color of player
+     * @return Score of player
+     */
     protected int getPlayerScore(boolean white_player)
     {
         return white_player?Integer.parseInt(WhiteCount.getText()):Integer.parseInt(BlackCount.getText());
     }
     
+    /**
+     * Print out the end game message
+     */
     protected void endGame()
     {
         JOptionPane.showMessageDialog(this,whoWins()+" the game","End of the game",JOptionPane.PLAIN_MESSAGE);
@@ -470,6 +483,9 @@ public class GameX extends javax.swing.JFrame implements Observer
             startTimer();
     }
     
+    /**
+     * Enable Undo in menu
+     */
     protected void enableUndo()
     {
         this.Undo.setEnabled(true);
@@ -481,6 +497,10 @@ public class GameX extends javax.swing.JFrame implements Observer
     }
     
     protected static int count_timer = 0;
+
+    /**
+     * Action performed by swing timer
+     */
     protected ActionListener action = new ActionListener()
     {   
         @Override
@@ -496,6 +516,9 @@ public class GameX extends javax.swing.JFrame implements Observer
         }
     };
     
+    /**
+     * Stop the timer for freezing stones
+     */
     protected void stopTimer()
     {
        timer.stop();
@@ -503,6 +526,9 @@ public class GameX extends javax.swing.JFrame implements Observer
        count_timer = 0; 
     }
     
+    /**
+     * Start timer for freezing stones
+     */
     protected void startTimer()
     {
       if(freeze_stones)
@@ -523,11 +549,17 @@ public class GameX extends javax.swing.JFrame implements Observer
             this.freeze_stones=false;
     }
     
+    /**
+     * @return Get difficulty of chosen AI
+     */
     public boolean getAIDiff()
     {
        return this.is_easy_diff;
     }
 
+    /**
+     * @return Get the oponent player or computer
+     */
     public boolean getOponentIsPlayer()
     {
        return this.oponent_is_player;         

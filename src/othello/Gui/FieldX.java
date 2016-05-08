@@ -2,6 +2,9 @@ package othello.Gui;
 
 import java.awt.Color;
 
+/**
+ * Representation of field in GUI
+ */
 public class FieldX extends javax.swing.JPanel {
     private final int[] size;
     private final int even_position;
@@ -10,7 +13,13 @@ public class FieldX extends javax.swing.JPanel {
     private BoardX board;
     protected boolean isWhite;
 
-    
+    /**
+     * @param row Row
+     * @param col Col
+     * @param dimension size of board
+     * @param even Position of stone in board
+     * @param board The GUI board
+     */
     public FieldX(int row,int col,int dimension,int even,BoardX board) {
         this.size = calcSizeOfField(dimension);
         this.even_position = even;
@@ -49,8 +58,8 @@ public class FieldX extends javax.swing.JPanel {
         switch (dimension)
         {
             case 6:
-                a[0]=94;
-                a[1]=92;
+                a[0]=92;
+                a[1]=90;
                 return a;
             case 8:
                 a[0]=70;
@@ -76,6 +85,10 @@ public class FieldX extends javax.swing.JPanel {
             setBackground(new Color(0,255,34));   
     }
     
+    /**
+     * Set stone on this field
+     * @param white Color of stone
+     */
     protected void setStone(boolean white)
     {
         if (white)
@@ -90,27 +103,42 @@ public class FieldX extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * @return Get occupation of this field
+     */
     protected boolean isEmpty()
     {
         return jLabel1.getIcon() == null;
     }
     
+    /**
+     * Remove stone from field
+     */
     protected void removeStone()
     {
         jLabel1.setIcon(null);
         jLabel1.revalidate();
     }
     
+    /**
+     * @return Get color of stone field
+     */
     protected boolean isWhite()
     {
         return this.isWhite;
     }
     
+    /**
+     * Graphic representation of frozen stone on field
+     */
     protected void freezeField()
     {
         setBackground(new Color(95,95,95));
     }
     
+    /**
+     * Graphic representation to unfreeze stone on field
+     */
     protected void unFreezeField()
     {
         setFieldColor();

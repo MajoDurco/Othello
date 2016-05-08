@@ -1,9 +1,15 @@
 package othello.Gui;
 
+/**
+ * Panel for difficulty choose
+ */
 public class AIDifficulty extends javax.swing.JPanel {
 
     private boolean is_easy_difficult = true;
     
+    /**
+     * Initialize the panel for choose
+     */
     public AIDifficulty() {
         initComponents();
     }
@@ -75,6 +81,9 @@ public class AIDifficulty extends javax.swing.JPanel {
         is_easy_difficult = false;
     }//GEN-LAST:event_hardActionPerformed
 
+    /**
+     * @return The chosen difficulty
+     */
     protected boolean getDifficulty()
     {
         return is_easy_difficult;

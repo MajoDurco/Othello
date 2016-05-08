@@ -1,11 +1,17 @@
 package othello.Gui;
 
+/**
+ * Panel for creating new game
+ */
 public class NewGamePanel extends javax.swing.JPanel {
     
     private int board_size = 8; // default 8x8 
     private boolean oponent_is_player = true;
     private boolean freezing_stones = false;
 
+    /**
+     * Initialize the components in the panel
+     */
     public NewGamePanel() 
     {
         initComponents();
@@ -206,16 +212,25 @@ public class NewGamePanel extends javax.swing.JPanel {
         freezing_stones = false;
     }//GEN-LAST:event_jRadioButton8ActionPerformed
 
+    /**
+     * @return Chosen size of board
+     */
     protected int getBoardSize()
     {
         return this.board_size;
     }
     
+    /**
+     * @return Chosen oponent
+     */
     protected boolean getOponent()
     {
         return this.oponent_is_player;
     }
     
+    /**
+     * @return If game use freezing stones
+     */
     protected boolean getFreeze()
     {
         return this.freezing_stones;

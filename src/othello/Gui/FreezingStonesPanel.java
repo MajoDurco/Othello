@@ -1,11 +1,17 @@
 package othello.Gui;
 
+/**
+ * Panel for choose attributes while using freezing stones
+ */
 public class FreezingStonesPanel extends javax.swing.JPanel {
 
     public FreezingStonesPanel() {
         initComponents();
     }
     
+    /**
+     * @return Number of stones which will be freezing
+     */
     protected long getFreezeStones()
     {
         if(freeze_stones.getValue()!=null)
@@ -13,6 +19,9 @@ public class FreezingStonesPanel extends javax.swing.JPanel {
         return 0;
     }
     
+    /**
+     * @return Time when stones gets frozen
+     */
     protected long getTimeToFreeze()
     {
         if(time_to_freeze.getValue()!=null)
@@ -20,6 +29,9 @@ public class FreezingStonesPanel extends javax.swing.JPanel {
         return 0;
     }
         
+    /**
+     * @return Time where stones unfreeze
+     */
     protected long getTimeToUnfreeze()
     {
         if(time_to_unfreeze.getValue()!=null)
