@@ -44,7 +44,7 @@ public class BorderField implements Field, Serializable
 
     /**
      * Does nothing
-     * @param disk
+     * @param disk Disk
      * @return 0
      */
     @Override
@@ -64,7 +64,7 @@ public class BorderField implements Field, Serializable
 
     /**
      * Return false
-     * @param disk
+     * @param disk Disk
      * @return false
      */
     public boolean canPutDisk(Disk disk)

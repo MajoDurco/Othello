@@ -110,8 +110,8 @@ public class Board implements Serializable
     
     /**
      *
-     * @param object
-     * @return object
+     * @param object Clonning object
+     * @return object Clonned object
      */
     public static Object deepClone(Object object) 
   {

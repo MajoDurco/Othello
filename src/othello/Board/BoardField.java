@@ -63,7 +63,7 @@ public class BoardField implements Field, Serializable
 
     /**
      * Puts a disk on the field
-     * @param disk
+     * @param disk Disk
      * @return number of disk switched
      */
     @Override

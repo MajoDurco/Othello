@@ -166,8 +166,11 @@ public class BoardX extends javax.swing.JPanel {
         this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
         if(checkEndGame())
             gameX.endGame();
-        if(gameX.freeze_stones)
-            gameX.startTimer();
+        else
+        {
+            if(gameX.freeze_stones)
+                gameX.startTimer();
+        }
     }
     
     private boolean canPlaceStone(int row,int col)

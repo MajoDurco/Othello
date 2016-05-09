@@ -283,6 +283,8 @@ public class GameX extends javax.swing.JFrame implements Observer
         game.setIsEasyDiff(is_easy_diff);
 
         enableSave();
+        WhiteCount.setText(String.valueOf(2));
+        BlackCount.setText(String.valueOf(2));
         visibleSidePanel(true); 
         pack();
         if(freeze_stones)

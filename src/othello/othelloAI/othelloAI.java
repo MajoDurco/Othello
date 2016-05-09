@@ -80,11 +80,16 @@ public class othelloAI
         }
         
         if (this.is_easy_diff){
-            int index = randomField.nextInt(fieldList.size());
-            field_ai = fieldList.get(index);
+            int index=0;
+            if(fieldList.size() == 0)
+               return;
+            index = randomField.nextInt(fieldList.size());
+            field_ai = fieldList.get(index); 
             fieldList.clear();
         }
         else {
+            if(f_max==null)
+                return;
             field_ai = f_max;
         }
         
