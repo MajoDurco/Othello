@@ -4,6 +4,7 @@ import java.awt.Color;
 
 /**
  * Representation of field in GUI
+ * @author xdurco00, xdomon00
  */
 public class FieldX extends javax.swing.JPanel {
     private final int[] size;

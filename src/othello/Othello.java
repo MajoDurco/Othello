@@ -2,8 +2,15 @@ package othello;
 
 import othello.Gui.GameX;
 
+/**
+ * Main class
+ * @author xdurco00, xdomon00
+ */
 public class Othello {
 
+    /**
+     * @param args argumenty metody main
+     */
     public static void main(String[] args) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

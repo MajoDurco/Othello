@@ -6,6 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * Implements the othello board
+ * @author xdurco00, xdomon00
+ */
 public class Board implements Serializable
 {
     public Field[] board_array; // array of objects which implements interface Field
@@ -13,6 +17,10 @@ public class Board implements Serializable
     protected Rules rules;
     private Field[] undo_board;
 
+    /**
+     * Initializes the board, board size, creates fields
+     * @param rules Rules of the game
+     */
     public Board(Rules rules)
     {
         this.rules = rules;
@@ -46,6 +54,13 @@ public class Board implements Serializable
 
 
     // return object on inserted [row,col] otherwise null
+
+    /**
+     * Returns the selected field
+     * @param row number of row on the board
+     * @param col number of column on the board
+     * @return field or null
+     */
     public final Field getField(int row, int col)
     {
         if (row >= 0 && row < (size + 2) && col >= 0 && col < (size + 2))
@@ -55,29 +70,50 @@ public class Board implements Serializable
     }
 
     // return the size of the board
+
+    /**
+     * Returns the size of the board
+     * @return size of the board
+     */
     public int getSize()
     {
         return this.size;
     }
 
     // return object of rules
+
+    /**
+     * Returns the rules
+     * @return rules of the game
+     */
     public Rules getRules()
     {
         return this.rules;
     }
     
+    /**
+     * Saves the current turn
+     */
     public void saveTurn()
     {
         this.undo_board  = (Field[])deepClone(this.board_array);
     }
     
+    /**
+     * Loads the current turn
+     */
     public void loadTurn()
     {
         if ( this.undo_board != null)
             this.board_array = (Field[])deepClone(this.undo_board);
     }
     
-  public static Object deepClone(Object object) 
+    /**
+     *
+     * @param object
+     * @return object
+     */
+    public static Object deepClone(Object object) 
   {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();

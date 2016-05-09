@@ -11,6 +11,7 @@ import othello.othelloAI.othelloAI;
 
 /**
  * Panel for the main board of the game
+ * @author xdurco00, xdomon00
  */
 public class BoardX extends javax.swing.JPanel {
     private final int fields;
@@ -122,7 +123,7 @@ public class BoardX extends javax.swing.JPanel {
             if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())
                 return;
             Field f1 = game.getBoard().getField(row, col);
-            if(!game.currentPlayer().isWhite()) // is black so its player
+            if(!game.currentPlayer().isWhite() && !gameX.getOponentIsPlayer()) // is black so its player
             {
                 game.playerMove(); // save board for undo
                 gameX.enableUndo();
@@ -136,7 +137,7 @@ public class BoardX extends javax.swing.JPanel {
             this.game.currentPlayer().setStoneNum(-swaped,true); // have to balance the number of stones on the other side
             if(checkEndGame())
                 gameX.endGame();
-            if(gameX.freeze_stones)
+            if(gameX.freeze_stones && gameX.getOponentIsPlayer())
                 gameX.startTimer();
             if(!gameX.getOponentIsPlayer() && game.currentPlayer().isWhite())  // player is AI
             {
@@ -316,7 +317,6 @@ public class BoardX extends javax.swing.JPanel {
     {
        ArrayList<FieldX> occupied_fields = getOccupiedFields();
        Random randomGenerator = new Random();
-       System.out.println("FreezeStones:");
        if(count > occupied_fields.size())
            count = occupied_fields.size();
        for(int i=0; i<count; i++)
@@ -337,7 +337,6 @@ public class BoardX extends javax.swing.JPanel {
      */
     protected void unFreezeStones()
     {
-       System.out.println("UnFreezeStones:");
        for(FieldX f:freeze_fieldsX)
        {
         f.unFreezeField();

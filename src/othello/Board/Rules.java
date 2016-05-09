@@ -1,5 +1,9 @@
 package othello.Board;
 
+/**
+ * Interface for the game rules
+ * @author xdurco00, xdomon00
+ */
 public interface Rules
 {
     int getSize(); // return size of board

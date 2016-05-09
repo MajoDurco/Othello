@@ -2,6 +2,7 @@ package othello.Gui;
 
 /**
  * Panel for difficulty choose
+ * @author xdurco00, xdomon00
  */
 public class AIDifficulty extends javax.swing.JPanel {
 

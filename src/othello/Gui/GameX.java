@@ -23,6 +23,7 @@ import othello.othelloAI.othelloAI;
 
 /**
  * GUI representation of game
+ * @author xdurco00, xdomon00
  */
 public class GameX extends javax.swing.JFrame implements Observer
 {
@@ -236,7 +237,6 @@ public class GameX extends javax.swing.JFrame implements Observer
         int response = JOptionPane.showOptionDialog(this,p,"Create New Game",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
         if(response != JOptionPane.OK_OPTION)
         {
-            System.out.println("EXITED OR CANCELED");
             return;
         }
         
@@ -266,6 +266,7 @@ public class GameX extends javax.swing.JFrame implements Observer
 
         if (boardX != null)
         {
+            this.Undo.setEnabled(false);
             BoardX.remove(boardX);
             BoardX.repaint();
         }
@@ -445,7 +446,6 @@ public class GameX extends javax.swing.JFrame implements Observer
     {
         int white_pool = this.game_serialized.getPlayer(true).getStoneNum();
         int black_pool = this.game_serialized.getPlayer(false).getStoneNum();
-        System.out.println("white_pool : " + white_pool + " black_pool: "+ black_pool);
         this.board_size = this.game_serialized.getBoard().getSize();
         this.rules = new ReversiRules(this.board_size);
         this.board = this.game_serialized.getBoard();
@@ -495,6 +495,7 @@ public class GameX extends javax.swing.JFrame implements Observer
         }
         WhiteCount.setText(String.valueOf(white_pool));
         BlackCount.setText(String.valueOf(black_pool));
+        this.Undo.setEnabled(false);
         visibleSidePanel(true);
         pack();
         if(freeze_stones)
@@ -526,7 +527,6 @@ public class GameX extends javax.swing.JFrame implements Observer
             count_timer++;
             if(count_timer == 2)
             {
-                System.out.println("Exiting timer");
                 stopTimer();
             }
             else

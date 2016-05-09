@@ -2,6 +2,7 @@ package othello.Gui;
 
 /**
  * Panel for choose attributes while using freezing stones
+ * @author xdurco00, xdomon00
  */
 public class FreezingStonesPanel extends javax.swing.JPanel {
 

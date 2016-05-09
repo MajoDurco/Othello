@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Disk or stone in the game
+ * @author xdurco00, xdomon00
  */
 public class Disk implements Serializable
 {
@@ -11,7 +12,7 @@ public class Disk implements Serializable
 
     /**
      * Create disk
-     * @param isWhite
+     * @param isWhite color of disk
      */
     public Disk(boolean isWhite)
     {
@@ -22,7 +23,7 @@ public class Disk implements Serializable
 
     /**
      * Check disk's color
-     * @return
+     * @return color of disk
      */
     public boolean isWhite()
     {

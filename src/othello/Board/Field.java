@@ -1,5 +1,9 @@
 package othello.Board;
 
+/**
+ * Interace for a field on the board
+ * @author xdurco00, xdomon00
+ */
 public interface Field
 {
     enum Direction

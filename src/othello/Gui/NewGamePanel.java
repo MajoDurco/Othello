@@ -2,6 +2,7 @@ package othello.Gui;
 
 /**
  * Panel for creating new game
+ * @author xdurco00, xdomon00
  */
 public class NewGamePanel extends javax.swing.JPanel {
     

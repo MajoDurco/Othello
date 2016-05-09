@@ -10,6 +10,10 @@ import othello.Board.*;
 import othello.Game.*;
 import othello.Gui.*;
 
+/**
+ * Game AI, implementing two simple algorithms
+ * @author xdomon00, xdurco00
+ */
 public class othelloAI
 {
     private final boolean is_easy_diff;
@@ -18,6 +22,11 @@ public class othelloAI
     private Random randomField;
     private BoardX board;
     
+    /**
+     * Create AI, initialize difficulty, board
+     * @param is_easy_diff AI difficulty
+     * @param board game board
+     */
     public othelloAI(boolean is_easy_diff, BoardX board)
     {
         this.is_easy_diff = is_easy_diff;
@@ -26,11 +35,19 @@ public class othelloAI
         this.board = board;
     }
     
+    /**
+     * Returns color of AI player
+     * @return color of player
+     */
     public boolean isWhite()
     {
         return true;
     }
     
+    /**
+     * Picks the field to put the disk on for the AI
+     * @param game the actual game
+     */
     public void getFieldAI(Game game)
     {    
         this.board_size = game.getBoard().getSize();
@@ -76,7 +93,7 @@ public class othelloAI
         row = field_ai.get_row();
         col = field_ai.get_col();
         
-        int delay=1500;
+        int delay=1000;
 
         Timer timer = new Timer(delay, new AbstractAction() {
             @Override
